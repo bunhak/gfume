@@ -45,7 +45,7 @@ class CategoryController extends Controller
 
     public function mockData(){
 
-        $a=['public/Fashion@1X.png','public/interior@1X.png'];
+        $a=['public/img/Fashion@1X.png','public/img/interior@1X.png'];
         for($i = 0;$i < 30;$i++){
             $t = rand(0,1);
             $cat = new Category();

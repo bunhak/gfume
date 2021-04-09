@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a346465f-7eed-47ae-aa87-3deee14034b6" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ItemController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ItemController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Image.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Item.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Item.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_07_104832_create_sub_categories_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_07_104832_create_sub_categories_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_07_104844_create_sub_sub_categories_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_07_104844_create_sub_sub_categories_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_110548_create_items_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_110548_create_items_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_111149_create_item_details_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_111149_create_item_details_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
-    </list>
+    <list default="true" id="a346465f-7eed-47ae-aa87-3deee14034b6" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -194,7 +184,7 @@
       <updated>1617618307404</updated>
       <workItem from="1617618312143" duration="15608000" />
       <workItem from="1617787341900" duration="5829000" />
-      <workItem from="1617889895762" duration="29202000" />
+      <workItem from="1617889895762" duration="29559000" />
     </task>
     <servers />
   </component>

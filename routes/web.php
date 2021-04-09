@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('mockData',[ItemController::class,'mockData']);
 
 
 Route::get('/confirmation_email/{verification_code}',[AuthController::class,'confirmation']);

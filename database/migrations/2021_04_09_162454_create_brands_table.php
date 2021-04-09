@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSizeTypesTable extends Migration
+class CreateBrandsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateSizeTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('size_types', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+        Schema::create('brands', function (Blueprint $table) {
+            $table->uuid('id');
             $table->string('name');
-            $table->string('created_by')->nullable();
-            $table->string('updated_by')->nullable();
-            $table->boolean('is_deleted')->default(false);
+            $table->string('image');
             $table->timestamps();
+            $table->string('created_by')->nullable();;
+            $table->string('updated_by')->nullable();;
+            $table->boolean('is_deleted')->default(false);
         });
     }
 
@@ -30,6 +31,6 @@ class CreateSizeTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('size_types');
+        Schema::dropIfExists('brands');
     }
 }

@@ -19,25 +19,25 @@ class ItemController extends Controller
 
         //mock category
         $a=['img/Fashion@1X.png','img/interior@1X.png'];
-        for($i = 0;$i < 30;$i++){
+        for($i = 0;$i < 15;$i++){
             $t = rand(0,1);
             $cat = new Category();
-            $cat->name = 'level 1 category'.$i;
+            $cat->name = 'l1('.$i.')';
             $cat->image = $a[$t];
             $cat->click_count = rand(0, 100000);
             $cat->save();
-            for($ii = 0;$ii < 30;$ii++){
+            for($ii = 0;$ii < 4;$ii++){
                 $tt = rand(0,1);
                 $cat2 = new SubCategory();
-                $cat2->name = 'level 2 category'.$ii;
+                $cat2->name = 'l1('.$i.') l2('.$ii.')';
                 $cat2->category_id = $cat->id;
                 $cat2->image = $a[$tt];
                 $cat2->click_count = rand(0, 100000);
                 $cat2->save();
-                for($iii = 0;$iii < 30;$iii++){
+                for($iii = 0;$iii < 5;$iii++){
                     $ttt = rand(0,1);
                     $cat3 = new SubSubCategory();
-                    $cat3->name = 'level 2 category'.$iii;
+                    $cat3->name ='l1('.$i.') l2('.$ii.') l3('.$i.')';
                     $cat3->sub_category_id = $cat2->id;
                     $cat3->image = $a[$ttt];
                     $cat3->click_count = rand(0, 100000);
@@ -51,7 +51,7 @@ class ItemController extends Controller
         for($i =0;$i<3;$i++){
             $brand = new Brand();
             $brand->name = 'brand '.$i;
-            $brand->img = $a[$i];
+            $brand->image = $a[$i];
             $brand->save();
         }
 
@@ -81,7 +81,7 @@ class ItemController extends Controller
         $sizeType->save();
         for ($i = 10;$i < 100;$i++){
             $size = new Size();
-            $size->name = $a[$i];
+            $size->name = [$i];
             $size->size_type_id = $sizeType->id;
             $size->order = $i;
         }

@@ -2,6 +2,39 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a346465f-7eed-47ae-aa87-3deee14034b6" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/FileController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/ItemController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/Advertise.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/Brand.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/Color.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/File.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/Image.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/Item.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/ItemDetail.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/ReviewItem.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/Role.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/RoleUser.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/Size.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Models/SizeType.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2021_04_08_223155_create_advertise_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_103112_create_roles_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_103153_create_role_users_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_103251_create_size_types_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_103350_create_colors_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_103444_create_sizes_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_110548_create_items_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_111149_create_item_details_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_112633_create_item_reviews_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_150153_create_files_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/adidas.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/jordan.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/nike.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/uploads/0790252e-bb36-416b-b19e-fb676055e428/0790252e-bb36-416b-b19e-fb676055e428.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/uploads/bee65003-4378-4b6f-a243-9fab41417372/bee65003-4378-4b6f-a243-9fab41417372.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/uploads/f804422a-0315-4274-bc01-8e2bb90aad22/f804422a-0315-4274-bc01-8e2bb90aad22.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/uploads/fd1a2e25-7345-4c3a-be39-1c14c12d525a/fd1a2e25-7345-4c3a-be39-1c14c12d525a.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/uploads/item_id/aeb46dc4-4122-45b5-a7b6-641d455f403d.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/uploads/item_id/fb565d12-d982-4fd0-ae79-88a66586463b.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/Category.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Category.php" afterDir="false" />
@@ -12,6 +45,7 @@
       <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_07_104832_create_sub_categories_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_07_104832_create_sub_categories_table.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_07_104844_create_sub_sub_categories_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_07_104844_create_sub_sub_categories_table.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -195,7 +229,7 @@
       <updated>1617618307404</updated>
       <workItem from="1617618312143" duration="15608000" />
       <workItem from="1617787341900" duration="5829000" />
-      <workItem from="1617889895762" duration="19841000" />
+      <workItem from="1617889895762" duration="21157000" />
     </task>
     <servers />
   </component>

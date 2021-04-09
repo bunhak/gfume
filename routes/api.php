@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,8 @@ use App\Http\Controllers\CategoryController;
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    return $request->user();
 //});
+
+Route::post('/uploadFile',[FileController::class,'uploadFile']);
 
 Route::group(['prefix'=>'category'],function () {
     Route::get('getCategoryHome',[CategoryController::class,'getCategoryHome']);

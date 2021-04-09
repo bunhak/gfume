@@ -2,7 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a346465f-7eed-47ae-aa87-3deee14034b6" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Category.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Category.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/SubCategory.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/SubCategory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/SubSubCategory.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/SubSubCategory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_07_103543_create_categories_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_07_103543_create_categories_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_07_104832_create_sub_categories_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_07_104832_create_sub_categories_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_07_104844_create_sub_sub_categories_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_07_104844_create_sub_sub_categories_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -147,6 +156,7 @@
   <component name="ProjectId" id="1qkIRiwJUfWqGk5wuYbaJw8uZy9" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -185,7 +195,7 @@
       <updated>1617618307404</updated>
       <workItem from="1617618312143" duration="15608000" />
       <workItem from="1617787341900" duration="5829000" />
-      <workItem from="1617889895762" duration="2546000" />
+      <workItem from="1617889895762" duration="19841000" />
     </task>
     <servers />
   </component>

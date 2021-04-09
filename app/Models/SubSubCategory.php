@@ -9,9 +9,5 @@ use Illuminate\Database\Eloquent\Model;
 class SubSubCategory extends Model
 {
     use HasFactory, Uuids;
-    protected $fillable = [
-        'name',
-        'image',
-        'click_count'
-    ];
+
 }

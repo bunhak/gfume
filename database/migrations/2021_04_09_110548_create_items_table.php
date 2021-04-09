@@ -18,9 +18,9 @@ class CreateItemsTable extends Migration
             $table->string('name');
             $table->string('brand_id');
             $table->string('shop_id');
-            $table->string('video_url');
+            $table->string('video_url')->nullable();
             $table->string('sub_sub_category_id');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->boolean('is_deleted')->default(false);

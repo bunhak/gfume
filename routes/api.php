@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\ItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,14 +29,17 @@ Route::group(['prefix'=>'category'],function () {
     Route::get('mockData',[CategoryController::class,'mockData']);
 });
 
+Route::group(['prefix'=>'item'],function () {
+    Route::post('addNewItem',[ItemController::class,'addNewItem']);
+    Route::post('getAllItem',[ItemController::class,'getAllItem']);
+    Route::post('getItemDetail',[ItemController::class,'getItemDetail']);
+    Route::get('getItemProperty',[ItemController::class,'getItemProperty']);
+});
+
 
 Route::group(['prefix'=>'auth'],function (){
     Route::post('login',[AuthController::class,'login']);
     Route::post('register',[AuthController::class,'register']);
-
-
-
-
     Route::group(['middleware' => 'auth:api'],function (){
         Route::get('logout',[AuthController::class,'logout']);
         Route::get('user',[AuthController::class,'user']);

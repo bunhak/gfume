@@ -18,9 +18,10 @@ class CreateSubCategoriesTable extends Migration
             $table->string('name');
             $table->string('image');
             $table->double('click_count');
-            $table->string('category_id')->nullable();;
-            $table->string('created_by')->nullable();;
-            $table->string('updated_by')->nullable();;
+            $table->string('category_id')->nullable();
+            $table->string('category_name')->nullable();
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });

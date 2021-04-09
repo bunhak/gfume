@@ -9,4 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     use HasFactory,Uuids;
+    public $item_details;
+
 }

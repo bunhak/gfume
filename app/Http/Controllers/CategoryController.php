@@ -17,7 +17,8 @@ class CategoryController extends Controller
             $temp = [
                 'id' => $cat[$i]->id,
                 'image' => 'http://app.gfume.com/'.$cat[$i]->image,
-                'click_count' => $cat[$i]->click_count
+                'click_count' => $cat[$i]->click_count,
+                'name' => $cat[$i]->name
 
             ];
             if($i < (sizeof($cat) / 2)){

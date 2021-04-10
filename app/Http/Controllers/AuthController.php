@@ -46,7 +46,21 @@ class AuthController extends Controller
         $user->email_verified_at = date("Y-m-d H:i:s");
         $user->verification_code = null;
         $user->save();
-        return view('auth.confirm_success');
+
+        $tokenResult = $user->createToken('Personal Access Token');
+        $token = $tokenResult->token;
+
+        if($request->remember_me){
+            $token->expires_at = Carbon::now()->addWeeks(1);
+        }
+        $token->save();
+        return response()->json([
+            'name' => $user->name,
+            'username' => $user->username,
+            'access_token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer',
+            'expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateString()
+        ]);
 
     }
 

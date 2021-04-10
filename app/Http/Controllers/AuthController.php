@@ -27,8 +27,10 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'verification_code' => sha1(time())
         ]);
+        $user->email_verified_at = date("Y-m-d H:i:s");
+        $user->verification_code = null;
         $user->save();
-        MailController::sendSignupEmail($user->name,$user->email,$user->verification_code);
+        //MailController::sendSignupEmail($user->name,$user->email,$user->verification_code);
 
         return response()->json([
             'message' => 'Successfully created user'

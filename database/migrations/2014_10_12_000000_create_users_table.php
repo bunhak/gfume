@@ -22,8 +22,8 @@ class CreateUsersTable extends Migration
             $table->boolean('is_verified')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('created_by');
-            $table->string('updated_by');
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->boolean('is_deleted')->default(false);
             $table->rememberToken();
             $table->timestamps();

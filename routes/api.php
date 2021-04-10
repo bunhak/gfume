@@ -22,18 +22,21 @@ use App\Http\Controllers\ItemController;
 //    return $request->user();
 //});
 
-Route::post('/uploadFile',[FileController::class,'uploadFile']);
 
-Route::group(['prefix'=>'category'],function () {
-    Route::get('getCategoryHome',[CategoryController::class,'getCategoryHome']);
-    Route::get('mockData',[CategoryController::class,'mockData']);
-});
+Route::group(['middleware' => 'auth:api'],function (){
+    Route::post('/uploadFile',[FileController::class,'uploadFile']);
 
-Route::group(['prefix'=>'item'],function () {
-    Route::post('addNewItem',[ItemController::class,'addNewItem']);
-    Route::post('getAllItem',[ItemController::class,'getAllItem']);
-    Route::post('getItemDetail',[ItemController::class,'getItemDetail']);
-    Route::get('getItemProperty',[ItemController::class,'getItemProperty']);
+    Route::group(['prefix'=>'category'],function () {
+        Route::get('getCategoryHome',[CategoryController::class,'getCategoryHome']);
+        Route::get('mockData',[CategoryController::class,'mockData']);
+    });
+
+    Route::group(['prefix'=>'item'],function () {
+        Route::post('addNewItem',[ItemController::class,'addNewItem']);
+        Route::post('getAllItem',[ItemController::class,'getAllItem']);
+        Route::post('getItemDetail',[ItemController::class,'getItemDetail']);
+        Route::get('getItemProperty',[ItemController::class,'getItemProperty']);
+    });
 });
 
 

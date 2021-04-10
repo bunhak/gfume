@@ -16,7 +16,7 @@ class CategoryController extends Controller
         for($i =0 ;$i < sizeof($cat);$i ++ ){
             $temp = [
                 'id' => $cat[$i]->id,
-                'image' => 'http://app.gfume.com/'.$cat[$i]->image,
+                'image' => 'http://test.gfume.com/'.$cat[$i]->image,
                 'click_count' => $cat[$i]->click_count,
                 'name' => $cat[$i]->name
 

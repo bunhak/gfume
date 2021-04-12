@@ -175,13 +175,17 @@ class ItemController extends Controller
         $id = $request->id ? $request->id : null;
         $item = DB::table('items')->where('id','=',$id)->first();
         $item_details = DB::table('item_details')->where('item_id','=',$id)->get();
+        $item_image_slide = DB::table('files')->where('item_id','=',$id)->where('image_type','=','slide')->select('id','url')->get();
+        $item_image_detail = DB::table('files')->where('item_id','=',$id)->where('image_type','=','detail')->select('id','url')->get();
         $result = [
             "id" => $item->id,
             "brand_id" => $item->brand_id,
             "shop_id" => $item->shop_id,
             "sub_sub_category_id" => $item->sub_sub_category_id,
             "description" => $item->description,
-            "item_details" => $item_details
+            "item_details" => $item_details,
+            "image_details" => $item_image_detail,
+            "image_slide" => $item_image_slide,
         ];
 
         return response()->json([

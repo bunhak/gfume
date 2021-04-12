@@ -16,8 +16,8 @@ class CreateItemsTable extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
-            $table->string('brand_id');
-            $table->string('shop_id');
+            $table->string('brand_id')->nullable();
+            $table->string('shop_id')->nullable();
             $table->string('video_url')->nullable();
             $table->string('sub_sub_category_id');
             $table->string('description')->nullable();

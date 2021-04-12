@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a346465f-7eed-47ae-aa87-3deee14034b6" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_110548_create_items_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_110548_create_items_table.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -188,7 +188,8 @@
       <workItem from="1617618312143" duration="15608000" />
       <workItem from="1617787341900" duration="5829000" />
       <workItem from="1617889895762" duration="29559000" />
-      <workItem from="1618057312350" duration="2533000" />
+      <workItem from="1618057312350" duration="3148000" />
+      <workItem from="1618161417876" duration="823000" />
     </task>
     <servers />
   </component>

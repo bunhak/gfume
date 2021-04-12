@@ -35,10 +35,10 @@ class FileController extends Controller
             $destinationPath = 'uploads\\'.$request->item_id;
             $fileDb->url = $file->move($destinationPath,$uuid.'.'.$file->getClientOriginalExtension());
             $fileDb->save();
-            array_push($result,$fileDb);
+            array_push($result,["id" => $fileDb->id, "name" => $file->getClientOriginalName()]);
         }
         return response()->json([
-            'message' => 'Successfully created upload file',
+            'message' => 'Successfully upload file',
             'data' => $result
         ],200);
 

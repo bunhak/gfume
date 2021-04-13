@@ -34,6 +34,7 @@ class FileController extends Controller
             $fileDb->image_type = $request->image_type;
             $destinationPath = 'uploads\\'.$request->item_id;
             $fileDb->url = $file->move($destinationPath,$uuid.'.'.$file->getClientOriginalExtension());
+            $fileDb->created_by = $request->user()->id;
             $fileDb->save();
             array_push($result,["id" => $fileDb->id, "name" => $file->getClientOriginalName()]);
         }

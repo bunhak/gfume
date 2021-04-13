@@ -117,6 +117,7 @@ class ItemController extends Controller
         $item->video_url = $request->video_url;
         $item->description = $request->description;
         $item->sub_sub_category_id = $request->sub_sub_category_id;
+        $item->created_by = $request->user()->id;
         $item->save();
         for($i =0;$i<sizeof($request->item_details);$i++){
             $it = $request->item_details[$i];
@@ -127,6 +128,7 @@ class ItemController extends Controller
             $item_detail->size_id = array_key_exists('size_id', $it) ?  $it['size_id'] : null;
             $item_detail->color_id = array_key_exists('color_id', $it) ?  $it['color_id'] : null;
             $item_detail->size_type_id = array_key_exists('size_type_id', $it) ?  $it['size_type_id'] : null;
+            $item_detail->created_by = $request->user()->id;
             $item_detail->save();
         }
         return response()->json([
@@ -139,9 +141,10 @@ class ItemController extends Controller
 
 
     public function deleteItem(Request $request){
-        $item_id = $request->item_id;
-        $item = DB::table('items')->where('id','=',$item_id)->first();
+        $item_id = $request->id;
+        $item = Item::find($item_id);
         $item->is_deleted = true;
+        $item->updated_by = $request->user()->id;
         $item->save();
         return response()->json([
             'status' => 'success',

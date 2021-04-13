@@ -142,10 +142,8 @@ class ItemController extends Controller
         $page = $request->page ? $request->page : 1;
         $limit = $request->limit ? $request->limit : 10;
         $items = DB::table('items')->skip(($page - 1) * 0)->take($limit)
-            ->join('brands', 'brands.id', '=', 'items.brand_id')
             ->join('sub_sub_categories', 'sub_sub_categories.id', '=', 'items.sub_sub_category_id')
-            ->join('shops', 'shops.id', '=', 'items.shop_id')
-            ->select('items.id as id ','items.name as name', 'brands.name as brand', 'shops.name as shop','sub_sub_categories.name as sub_sub_categorie')
+            ->select('items.id as id ','items.name as name', 'sub_sub_categories.name as sub_sub_categorie')
             ->get();
         $count = DB::table('items')->count();
         $result = [

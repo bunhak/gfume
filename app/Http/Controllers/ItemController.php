@@ -146,7 +146,7 @@ class ItemController extends Controller
                             LEFT JOIN shops s ON i.shop_id = s.id
                             LEFT JOIN sub_sub_categories ssc ON i.sub_sub_category_id = ssc.id
                             LIMIT ".$limit."
-                            offset ".($page - 1));
+                            offset ".(($page - 1) * 10));
         $count = DB::table('items')->count();
         $result = [
             'items' => $items,

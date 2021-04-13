@@ -196,6 +196,7 @@ class ItemController extends Controller
         $item_image_detail = DB::table('files')->where('item_id','=',$id)->where('image_type','=','detail')->select('id','url')->get();
         $result = [
             "id" => $item->id,
+            "name" => $item->name,
             "brand_id" => $item->brand_id,
             "shop_id" => $item->shop_id,
             "sub_sub_category_id" => $item->sub_sub_category_id,

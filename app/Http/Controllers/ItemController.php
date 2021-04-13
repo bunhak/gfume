@@ -161,9 +161,9 @@ class ItemController extends Controller
                             LEFT JOIN brands b ON i.brand_id = b.id
                             LEFT JOIN shops s ON i.shop_id = s.id
                             LEFT JOIN sub_sub_categories ssc ON i.sub_sub_category_id = ssc.id
+                            WHERE i.is_deleted = false 
                             LIMIT ".$limit."
-                            offset ".(($page - 1) * 10) .
-                            " WHERE i.is_deleted = false");
+                            offset ".(($page - 1) * 10));
         $count = DB::table('items')->where('is_deleted','=',false)->count();
         $result = [
             'items' => $items,

@@ -163,7 +163,7 @@ class ItemController extends Controller
                             LEFT JOIN sub_sub_categories ssc ON i.sub_sub_category_id = ssc.id
                             LIMIT ".$limit."
                             offset ".(($page - 1) * 10) .
-                            "WHERE i.is_deleted = false");
+                            " WHERE i.is_deleted = false");
         $count = DB::table('items')->where('is_deleted','=',false)->count();
         $result = [
             'items' => $items,

@@ -192,8 +192,14 @@ class ItemController extends Controller
         $id = $request->id ? $request->id : null;
         $item = DB::table('items')->where('id','=',$id)->first();
         $item_details = DB::table('item_details')->where('item_id','=',$id)->get();
-        $item_image_slide = DB::table('files')->where('item_id','=',$id)->where('image_type','=','slide')->select('id','url')->get();
-        $item_image_detail = DB::table('files')->where('item_id','=',$id)->where('image_type','=','detail')->select('id','url')->get();
+        $item_image_slide = DB::select("
+            SELECT id, CONCAT('".env('APP_URL')."',url) AS url FROM files
+            WHERE item_id = '".$id."'
+            AND image_type = 'slide'");
+        $item_image_detail = DB::select("
+            SELECT id, CONCAT('".env('APP_URL')."',url) AS url FROM files
+            WHERE item_id = '".$id."'
+            AND image_type = 'detail'");
         $result = [
             "id" => $item->id,
             "name" => $item->name,

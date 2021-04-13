@@ -138,6 +138,19 @@ class ItemController extends Controller
     }
 
 
+    public function deleteItem(Request $request){
+        $item_id = $request->item_id;
+        $item = DB::table('items')->where('id','=',$item_id)->first();
+        $item->is_deleted = true;
+        $item->save();
+        return response()->json([
+            'status' => 'success',
+            "code"=> 200,
+            "message"=> "OK"
+        ],200);
+    }
+
+
     public function getAllItem(Request $request){
         $page = $request->page ? $request->page : 1;
         $limit = $request->limit ? $request->limit : 10;
@@ -146,8 +159,9 @@ class ItemController extends Controller
                             LEFT JOIN shops s ON i.shop_id = s.id
                             LEFT JOIN sub_sub_categories ssc ON i.sub_sub_category_id = ssc.id
                             LIMIT ".$limit."
-                            offset ".(($page - 1) * 10));
-        $count = DB::table('items')->count();
+                            offset ".(($page - 1) * 10) .
+                            "WHERE i.is_deleted = false");
+        $count = DB::table('items')->where('is_deleted','=',false)->count();
         $result = [
             'items' => $items,
             "meta" =>[

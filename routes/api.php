@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth:api'],function (){
 
     Route::group(['prefix'=>'item'],function () {
         Route::post('addNewItem',[ItemController::class,'addNewItem']);
+        Route::post('deleteItem',[ItemController::class,'deleteItem']);
         Route::post('getAllItem',[ItemController::class,'getAllItem']);
         Route::post('getItemDetail',[ItemController::class,'getItemDetail']);
         Route::get('getItemProperty',[ItemController::class,'getItemProperty']);

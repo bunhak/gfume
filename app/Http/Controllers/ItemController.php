@@ -141,10 +141,10 @@ class ItemController extends Controller
     public function getAllItem(Request $request){
         $page = $request->page ? $request->page : 1;
         $limit = $request->limit ? $request->limit : 10;
-        $items = DB::table('items')->skip(($page - 1) * 0)->take($limit)
-            ->join('sub_sub_categories', 'sub_sub_categories.id', '=', 'items.sub_sub_category_id')
-            ->select('items.id as id ','items.name as name', 'sub_sub_categories.name as sub_sub_categorie')
-            ->get();
+        $items = DB::select("SELECT i.id AS id , i.name AS name, b.name AS brand, s.name AS shop, ssc.sub_category_name AS sub_sub_category FROM items i
+LEFT JOIN brands b ON i.brand_id = b.id
+LEFT JOIN shops s ON i.shop_id = s.id
+LEFT JOIN sub_sub_categories ssc ON i.sub_sub_category_id = ssc.id");
         $count = DB::table('items')->count();
         $result = [
             'items' => $items,

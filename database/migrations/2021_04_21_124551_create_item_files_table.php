@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRolesTable extends Migration
+class CreateItemFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateRolesTable extends Migration
      */
     public function up()
     {
-        Schema::create('roles', function (Blueprint $table) {
+        Schema::create('item_files', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->string('file_id');
+            $table->string('item_id');
             $table->timestamps();
-            $table->string('created_by')->nullable();
-            $table->string('updated_by')->nullable();
-            $table->boolean('is_deleted')->default(false);
         });
     }
 
@@ -29,6 +28,6 @@ class CreateRolesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('item_files');
     }
 }

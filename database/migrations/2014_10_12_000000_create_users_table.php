@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('username')->unique();
             $table->string('verification_code')->nullable();
+            $table->string('role')->nullable();
             $table->boolean('is_verified')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

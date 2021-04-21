@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\RoleUser;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Validator;
+use DB;
 
 class AuthController extends Controller
 {
@@ -24,6 +26,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'name' => $request->name,
             'username' => $request->username,
+            'role' => 'USER',
             'password' => Hash::make($request->password),
             'verification_code' => sha1(time())
         ]);
@@ -37,6 +40,64 @@ class AuthController extends Controller
         ],201);
     }
 
+    public function registerSeller(Request $request){
+        $validator = Validator::make($request->all(),[
+            'name' => 'required',
+            'email' => 'required|string|unique:users',
+            'username' => 'required|string|unique:users',
+            'password' => 'required|string|confirmed'
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        $user = new User([
+            'email' => $request->email,
+            'name' => $request->name,
+            'role' => 'SELLER',
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            'verification_code' => sha1(time())
+        ]);
+        $user->email_verified_at = date("Y-m-d H:i:s");
+        $user->verification_code = null;
+        $user->save();
+        //MailController::sendSignupEmail($user->name,$user->email,$user->verification_code);
+
+        return response()->json([
+            'message' => 'Successfully created user'
+        ],201);
+    }
+
+    public function registerAdmin(Request $request){
+        $validator = Validator::make($request->all(),[
+            'name' => 'required',
+            'email' => 'required|string|unique:users',
+            'username' => 'required|string|unique:users',
+            'password' => 'required|string|confirmed'
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        if($request->gfumeConfirmPassword != env('GFUME')){
+            return response()->json('sorry you are not valid', 400);
+        }
+        $user = new User([
+            'email' => $request->email,
+            'name' => $request->name,
+            'role' => 'ADMIN',
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            'verification_code' => sha1(time())
+        ]);
+        $user->email_verified_at = date("Y-m-d H:i:s");
+        $user->verification_code = null;
+        $user->save();
+        //MailController::sendSignupEmail($user->name,$user->email,$user->verification_code);
+
+        return response()->json([
+            'message' => 'Successfully created user'
+        ],201);
+    }
 
     public function confirmation(Request $request,$verification_code){
         $user = User::where('verification_code', $verification_code)->first();
@@ -89,6 +150,7 @@ class AuthController extends Controller
         return response()->json([
             'name' => $user->name,
             'username' => $user->username,
+            'role' => $user->role,
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateString()

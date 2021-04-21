@@ -20,7 +20,6 @@ class ItemController extends Controller
 {
 
     public function mockData(){
-
         //mock category
         $a=['img/Fashion@1X.png','img/interior@1X.png'];
         for($i = 0;$i < 15;$i++){

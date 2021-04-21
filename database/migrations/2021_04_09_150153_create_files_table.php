@@ -17,10 +17,11 @@ class CreateFilesTable extends Migration
             $table->uuid('id');
             $table->string('url')->nullable();
             $table->string('thumbnail')->nullable();
+            $table->string('module_id')->nullable();
             $table->string('extension')->nullable();
             $table->string('mime_type')->nullable();
             $table->double('size')->nullable();
-            $table->string('image_type')->nullable();
+            $table->string('module_name')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->timestamps();

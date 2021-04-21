@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdvertiseTable extends Migration
+class CreateAddressTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,16 @@ class CreateAdvertiseTable extends Migration
      */
     public function up()
     {
-        Schema::create('advertise', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name');
-            $table->string('item_id');
-            $table->dateTime('from');
-            $table->dateTime('to');
+        Schema::create('address', function (Blueprint $table) {
+            $table->uuid('id');
+            $table->string('module_id')->nullable();
+            $table->string('module_name')->nullable();
+            $table->double('lat')->nullable();
+            $table->double('lng')->nullable();
+            $table->string('location')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
+            $table->boolean('is_default')->default(false);
             $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
@@ -33,6 +35,6 @@ class CreateAdvertiseTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('advertise');
+        Schema::dropIfExists('address');
     }
 }

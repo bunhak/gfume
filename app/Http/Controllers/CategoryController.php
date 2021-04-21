@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -42,11 +40,24 @@ class CategoryController extends Controller
 
         return response()->json($result);
     }
+    public function createCategory(Request $request){
+        $validator = Validator::make($request->all(),[
+            'name' => 'required|string'
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
 
-
-
+        $category = new Category();
+        $category->name = '';
+        return response()->json([
+            'status' => 'success',
+            "code"=> 200,
+            "message"=> "OK",
+            'data' => $category
+        ],200);
+    }
     public function mockData(){
-
         $a=['img/Fashion@1X.png','img/interior@1X.png'];
         for($i = 0;$i < 30;$i++){
             $t = rand(0,1);

@@ -32,6 +32,9 @@ Route::group(['prefix'=>'category'],function () {
 // need token
 Route::group(['middleware' => 'auth:api'],function (){
     Route::post('/uploadFile',[FileController::class,'uploadFile']);
+    Route::group(['prefix'=>'category'],function () {
+        Route::post('createCategory',[CategoryController::class,'createCategory']);
+    });
     Route::group(['prefix'=>'item'],function () {
         Route::post('addNewItem',[ItemController::class,'addNewItem']);
         Route::post('deleteItem',[ItemController::class,'deleteItem']);

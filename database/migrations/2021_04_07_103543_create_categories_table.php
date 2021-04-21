@@ -16,9 +16,10 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
-            $table->double('click_count');
-            $table->string('created_by')->nullable();;
-            $table->string('updated_by')->nullable();;
+            $table->string('img')->default('img/no image.png');
+            $table->double('click_count')->default(0);
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });

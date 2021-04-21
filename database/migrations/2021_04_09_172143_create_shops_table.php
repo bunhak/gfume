@@ -16,6 +16,11 @@ class CreateShopsTable extends Migration
         Schema::create('shops', function (Blueprint $table) {
             $table->uuid('id');
             $table->string('name');
+            $table->string('img')->default('img/no image.png');
+            $table->string('user_id');
+            $table->string('created_by')->nullable();;
+            $table->string('updated_by')->nullable();;
+            $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
     }

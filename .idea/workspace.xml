@@ -4,17 +4,9 @@
     <list default="true" id="bf9c8a8a-f728-46e0-b7c2-5b021becaed1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Advertise.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ItemFile.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Address.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ItemController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ItemController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_07_103543_create_categories_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_07_103543_create_categories_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_07_104832_create_sub_categories_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_07_104832_create_sub_categories_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_07_104844_create_sub_sub_categories_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_07_104844_create_sub_sub_categories_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_08_223155_create_advertise_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_21_200625_create_address_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_103350_create_colors_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_103350_create_colors_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_150153_create_files_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_150153_create_files_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_162454_create_brands_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_162454_create_brands_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_21_124551_create_item_files_table.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_172143_create_shops_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_172143_create_shops_table.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -163,6 +155,7 @@
   <component name="ProjectId" id="1rTj1BLRvO1CmooN25mqT3h94G0" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/public/img" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -196,7 +189,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1619006756720</updated>
-      <workItem from="1619006760655" duration="17678000" />
+      <workItem from="1619006760655" duration="19413000" />
     </task>
     <servers />
   </component>

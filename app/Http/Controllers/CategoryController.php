@@ -15,7 +15,7 @@ class CategoryController extends Controller
         for($i =0 ;$i < sizeof($cat);$i ++ ){
             $temp = [
                 'id' => $cat[$i]->id,
-                'image' => 'http://test.gfume.com/'.$cat[$i]->image,
+                'image' => env('APP_URL').$cat[$i]->image,
                 'click_count' => $cat[$i]->click_count,
                 'name' => $cat[$i]->name
 
@@ -26,7 +26,6 @@ class CategoryController extends Controller
                 array_push($cateSecond,$temp);
             }
         }
-
         $result = [
             'status' => 'success',
             "code"=> 200,
@@ -35,9 +34,7 @@ class CategoryController extends Controller
                 'categoryFirst' => $catFirst,
                 'categorySecond' => $cateSecond
             ]
-
         ];
-
         return response()->json($result);
     }
     public function createCategory(Request $request){
@@ -49,7 +46,8 @@ class CategoryController extends Controller
         }
 
         $category = new Category();
-        $category->name = '';
+        $category->name = $request->name;
+        $category->save();
         return response()->json([
             'status' => 'success',
             "code"=> 200,

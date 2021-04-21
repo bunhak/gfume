@@ -15,7 +15,8 @@ class CreateSubSubCategoriesTable extends Migration
     {
         Schema::create('sub_sub_categories', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');$table->string('img')->default('img/no image.png');
+            $table->string('name');
+            $table->string('img')->default('img/no image.png');
             $table->double('click_count');
             $table->string('sub_category_id')->nullable();
             $table->string('sub_category_name')->nullable();

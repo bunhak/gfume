@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
 
-    public function getCategoryHome(){
+    public function getCategoryHome(Request $request){
         $cat = Category::orderBy('click_count','desc')->take(20)->get();
         $catFirst = [];
         $cateSecond = [];

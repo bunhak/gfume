@@ -23,14 +23,15 @@ use App\Http\Controllers\ItemController;
 //});
 
 
+// no need token
+Route::group(['prefix'=>'category'],function () {
+    Route::get('getCategoryHome',[CategoryController::class,'getCategoryHome']);
+    Route::get('mockData',[CategoryController::class,'mockData']);
+});
+
+// need token
 Route::group(['middleware' => 'auth:api'],function (){
     Route::post('/uploadFile',[FileController::class,'uploadFile']);
-
-    Route::group(['prefix'=>'category'],function () {
-        Route::get('getCategoryHome',[CategoryController::class,'getCategoryHome']);
-        Route::get('mockData',[CategoryController::class,'mockData']);
-    });
-
     Route::group(['prefix'=>'item'],function () {
         Route::post('addNewItem',[ItemController::class,'addNewItem']);
         Route::post('deleteItem',[ItemController::class,'deleteItem']);

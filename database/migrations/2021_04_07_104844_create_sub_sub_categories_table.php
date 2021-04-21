@@ -19,6 +19,7 @@ class CreateSubSubCategoriesTable extends Migration
             $table->double('click_count');
             $table->string('sub_category_id')->nullable();
             $table->string('sub_category_name')->nullable();
+            $table->string('category_id')->nullable();
             $table->string('category_name')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

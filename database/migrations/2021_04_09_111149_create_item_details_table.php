@@ -18,7 +18,6 @@ class CreateItemDetailsTable extends Migration
             $table->string('item_id');
             $table->double('qty');
             $table->double('price');
-            $table->string('size_type_id')->nullable();
             $table->string('size_id')->nullable();
             $table->string('color_id')->nullable();
             $table->string('created_by')->nullable();

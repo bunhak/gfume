@@ -17,7 +17,7 @@ class CreateItemReviewsTable extends Migration
             $table->uuid('id');
             $table->string('user_id');
             $table->string('item_id');
-            $table->string('description')->nullable();
+            $table->string('text')->nullable();
             $table->integer('rate')->nullable();
             $table->timestamps();
         });

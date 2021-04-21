@@ -2,14 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bf9c8a8a-f728-46e0-b7c2-5b021becaed1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.rnd" beforeDir="false" afterPath="$PROJECT_DIR$/.rnd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_07_103543_create_categories_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_07_103543_create_categories_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_07_104832_create_sub_categories_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_07_104832_create_sub_categories_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_07_104844_create_sub_sub_categories_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_07_104844_create_sub_sub_categories_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_103251_create_size_types_table.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_103350_create_colors_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_103350_create_colors_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_162454_create_brands_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_162454_create_brands_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_172143_create_shops_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_172143_create_shops_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_103444_create_sizes_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_103444_create_sizes_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_111149_create_item_details_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_111149_create_item_details_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_112633_create_item_reviews_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_112633_create_item_reviews_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -197,7 +196,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1619006756720</updated>
-      <workItem from="1619006760655" duration="21237000" />
+      <workItem from="1619006760655" duration="22561000" />
     </task>
     <servers />
   </component>

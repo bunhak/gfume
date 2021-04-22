@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Validator;
 
 class BrandController extends Controller
 {
-    public function createCategory(Request $request){
+    public function createBrand(Request $request){
         $validator = Validator::make($request->all(),[
             'name' => 'required|string'
         ]);

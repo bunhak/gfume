@@ -98,6 +98,7 @@ class FileController extends Controller
                 $this->resize_crop_image(100, 100, $fileDb->url, $thumb);
                 $fileDb->thumbnail = $thumb;
             }
+            $fileDb->created_by = $request->user()->id;
             $fileDb->save();
             array_push($result,["id" => $fileDb->id, "name" => $file->getClientOriginalName()]);
             $itemFile = new ItemFile();

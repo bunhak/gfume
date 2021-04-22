@@ -6,8 +6,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ItemDetailController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\SizeController;
+use App\Http\Controllers\ColorController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\SubSubCategoryController;
 
@@ -60,14 +63,25 @@ Route::group(['middleware' => 'auth:api'],function (){
         Route::post('createShop',[ShopController::class,'createShop']);
     });
 
+    Route::group(['prefix'=>'admin/color'],function () {
+        Route::post('createColor',[ColorController::class,'createColor']);
+    });
+
+    Route::group(['prefix'=>'admin/size'],function () {
+        Route::post('createSize',[SizeController::class,'createSize']);
+    });
+
 
     Route::group(['prefix'=>'admin/item'],function () {
-        Route::post('addNewItem',[ItemController::class,'addNewItem']);
-        Route::post('deleteItem',[ItemController::class,'deleteItem']);
+        Route::post('createNewItem',[ItemController::class,'createNewItem']);
         Route::post('getAllItem',[ItemController::class,'getAllItem']);
-        Route::post('getItemDetail',[ItemController::class,'getItemDetail']);
         Route::get('getItemProperty',[ItemController::class,'getItemProperty']);
     });
+
+    Route::group(['prefix'=>'admin/itemDetail'],function () {
+        Route::post('createItemDetail',[ItemDetailController::class,'createItemDetail']);
+    });
+
 });
 
 

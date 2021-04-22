@@ -17,7 +17,7 @@ class CreateSizesTable extends Migration
             $table->uuid('id')->primary();
             $table->string('item_id');
             $table->string('name');
-            $table->double('order');
+            $table->double('order')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->boolean('is_deleted')->default(false);

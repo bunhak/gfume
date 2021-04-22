@@ -35,9 +35,22 @@ class AuthController extends Controller
         $user->save();
         //MailController::sendSignupEmail($user->name,$user->email,$user->verification_code);
 
+        $tokenResult = $user->createToken('Personal Access Token');
+        $token = $tokenResult->token;
+
+        if($request->remember_me){
+            $token->expires_at = Carbon::now()->addWeeks(1);
+        }
+        $token->save();
         return response()->json([
-            'message' => 'Successfully created user'
-        ],201);
+            'name' => $user->name,
+            'username' => $user->username,
+            'currency' => $user->currency,
+            'role' => $user->role,
+            'access_token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer',
+            'expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateString()
+        ]);
     }
 
     public function registerSeller(Request $request){
@@ -63,9 +76,22 @@ class AuthController extends Controller
         $user->save();
         //MailController::sendSignupEmail($user->name,$user->email,$user->verification_code);
 
+        $tokenResult = $user->createToken('Personal Access Token');
+        $token = $tokenResult->token;
+
+        if($request->remember_me){
+            $token->expires_at = Carbon::now()->addWeeks(1);
+        }
+        $token->save();
         return response()->json([
-            'message' => 'Successfully created user'
-        ],201);
+            'name' => $user->name,
+            'username' => $user->username,
+            'currency' => $user->currency,
+            'role' => $user->role,
+            'access_token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer',
+            'expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateString()
+        ]);
     }
 
     public function registerAdmin(Request $request){
@@ -94,9 +120,22 @@ class AuthController extends Controller
         $user->save();
         //MailController::sendSignupEmail($user->name,$user->email,$user->verification_code);
 
+        $tokenResult = $user->createToken('Personal Access Token');
+        $token = $tokenResult->token;
+
+        if($request->remember_me){
+            $token->expires_at = Carbon::now()->addWeeks(1);
+        }
+        $token->save();
         return response()->json([
-            'message' => 'Successfully created user'
-        ],201);
+            'name' => $user->name,
+            'username' => $user->username,
+            'currency' => $user->currency,
+            'role' => $user->role,
+            'access_token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer',
+            'expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateString()
+        ]);
     }
 
     public function confirmation(Request $request,$verification_code){
@@ -150,6 +189,7 @@ class AuthController extends Controller
         return response()->json([
             'name' => $user->name,
             'username' => $user->username,
+            'currency' => $user->currency,
             'role' => $user->role,
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',

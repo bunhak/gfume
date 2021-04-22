@@ -101,9 +101,12 @@ class ItemController extends Controller
 
     }
 
-    public function addNewItem(Request $request){
+    public function createNewItem(Request $request){
         $validator = Validator::make($request->all(),[
-            'name' => 'required|string'
+            'name' => 'required|string',
+            'shop_id' => 'required|string',
+            'sub_sub_category_id' => 'required|string',
+            'item_details' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
@@ -118,17 +121,6 @@ class ItemController extends Controller
         $item->sub_sub_category_id = $request->sub_sub_category_id;
         $item->created_by = $request->user()->id;
         $item->save();
-        for($i =0;$i<sizeof($request->item_details);$i++){
-            $it = $request->item_details[$i];
-            $item_detail = new ItemDetail();
-            $item_detail->item_id = $item->id;
-            $item_detail->qty = array_key_exists('qty', $it) ?  $it['qty'] : null;
-            $item_detail->price = array_key_exists('price', $it) ?  $it['price'] : null;
-            $item_detail->size_id = array_key_exists('size_id', $it) ?  $it['size_id'] : null;
-            $item_detail->color_id = array_key_exists('color_id', $it) ?  $it['color_id'] : null;
-            $item_detail->created_by = $request->user()->id;
-            $item_detail->save();
-        }
         return response()->json([
             'status' => 'success',
             "code"=> 200,
@@ -150,16 +142,18 @@ class ItemController extends Controller
             "message"=> "OK"
         ],200);
     }
-
-
     public function getAllItem(Request $request){
         $page = $request->page ? $request->page : 1;
         $limit = $request->limit ? $request->limit : 10;
+        $where = '';
+        if($request->search && $request->search != ''){
+            $where = ' AND i.name like "%'.$request->search.'%"';
+        }
         $items = DB::select("SELECT i.id AS id , i.name AS name, b.name AS brand, s.name AS shop, ssc.sub_category_name AS sub_sub_category FROM items i
                             LEFT JOIN brands b ON i.brand_id = b.id
                             LEFT JOIN shops s ON i.shop_id = s.id
                             LEFT JOIN sub_sub_categories ssc ON i.sub_sub_category_id = ssc.id
-                            WHERE i.is_deleted = false 
+                            WHERE i.is_deleted = false ".$where."
                             LIMIT ".$limit."
                             offset ".(($page - 1) * 10));
         $count = DB::table('items')->where('is_deleted','=',false)->count();

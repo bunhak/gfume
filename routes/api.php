@@ -8,6 +8,8 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\SubCategoryController;
+use App\Http\Controllers\SubSubCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +45,16 @@ Route::group(['middleware' => 'auth:api'],function (){
     Route::group(['prefix'=>'admin/brand'],function () {
         Route::post('createBrand',[BrandController::class,'createBrand']);
     });
+
+    Route::group(['prefix'=>'admin/subCategory'],function () {
+        Route::post('createSubCategory',[SubCategoryController::class,'createSubCategory']);
+    });
+
+    Route::group(['prefix'=>'admin/subSubCategory'],function () {
+        Route::post('createSubSubCategory',[SubSubCategoryController::class,'createSubSubCategory']);
+    });
+
+
 
     Route::group(['prefix'=>'admin/shop'],function () {
         Route::post('createShop',[ShopController::class,'createShop']);

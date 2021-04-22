@@ -126,7 +126,6 @@ class ItemController extends Controller
             $item_detail->price = array_key_exists('price', $it) ?  $it['price'] : null;
             $item_detail->size_id = array_key_exists('size_id', $it) ?  $it['size_id'] : null;
             $item_detail->color_id = array_key_exists('color_id', $it) ?  $it['color_id'] : null;
-            $item_detail->size_type_id = array_key_exists('size_type_id', $it) ?  $it['size_type_id'] : null;
             $item_detail->created_by = $request->user()->id;
             $item_detail->save();
         }
@@ -220,19 +219,12 @@ class ItemController extends Controller
     }
 
     public function getItemProperty(Request $request){
+        $shops = DB::table('shops')->select('id','name')->where('user_id,','=',$request->user()->id)->get();
         $brands = DB::table('brands')->select('id','name')->get();
-        $colors = DB::table('colors')->select('id','name')->get();
-        $shops = DB::table('shops')->select('id','name')->get();
-        $sizes = DB::table('sizes')->select('id','name')->get();
-        $size_types = DB::table('size_types')->select('id','name')->get();
         $sub_sub_categories = DB::table('sub_sub_categories')->select('id','name','category_name','sub_category_name')->get();
-
         $result = [
             "brands" => $brands,
-            "colors" => $colors,
             "shops" => $shops,
-            "sizes" => $sizes,
-            "size_types" => $size_types,
             "sub_sub_categories" => $sub_sub_categories
         ];
 

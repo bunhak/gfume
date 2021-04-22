@@ -69,7 +69,9 @@ class FileController extends Controller
         $validator = Validator::make($request->all(),[
             'files' => 'required',
             'id' => 'required|string',
-            'image_type' => 'required|string'
+            'image_type' => 'required|string',
+            'module_id' => 'required|string',
+            'module_name' => 'required|string'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
@@ -88,12 +90,14 @@ class FileController extends Controller
             $destinationPath = 'uploads\\'.$request->id;
             $fileDb->url = $file->move($destinationPath,$uuid.'.'.$file->getClientOriginalExtension());
             $fileDb->created_by = $request->user()->id;
-            $thumb = $destinationPath.'\\'.'thumbnail\\'.$uuid.'.'.$file->getClientOriginalExtension();
-            if (!file_exists($destinationPath.'\\'.'thumbnail')) {
-                mkdir($destinationPath.'\\'.'thumbnail');
+            if($request->thumbnail != 'false'){
+                $thumb = $destinationPath.'\\'.'thumbnail\\'.$uuid.'.'.$file->getClientOriginalExtension();
+                if (!file_exists($destinationPath.'\\'.'thumbnail')) {
+                    mkdir($destinationPath.'\\'.'thumbnail');
+                }
+                $this->resize_crop_image(100, 100, $fileDb->url, $thumb);
+                $fileDb->thumbnail = $thumb;
             }
-            $this->resize_crop_image(100, 100, $fileDb->url, $thumb);
-            $fileDb->thumbnail = $thumb;
             $fileDb->save();
             array_push($result,["id" => $fileDb->id, "name" => $file->getClientOriginalName()]);
             $itemFile = new ItemFile();

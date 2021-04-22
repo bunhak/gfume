@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\BrandController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,9 +34,16 @@ Route::group(['prefix'=>'category'],function () {
 Route::group(['middleware' => 'auth:api'],function (){
     Route::post('/uploadFile',[FileController::class,'uploadFile']);
 
+
     Route::group(['prefix'=>'admin/category'],function () {
         Route::post('createCategory',[CategoryController::class,'createCategory']);
     });
+
+    Route::group(['prefix'=>'admin/brand'],function () {
+        Route::post('createBrand',[BrandController::class,'createBrand']);
+    });
+
+
     Route::group(['prefix'=>'admin/item'],function () {
         Route::post('addNewItem',[ItemController::class,'addNewItem']);
         Route::post('deleteItem',[ItemController::class,'deleteItem']);

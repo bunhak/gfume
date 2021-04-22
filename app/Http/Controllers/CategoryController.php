@@ -47,6 +47,7 @@ class CategoryController extends Controller
 
         $category = new Category();
         $category->name = $request->name;
+        $category->created_by = $request->user()->id;
         $category->save();
         return response()->json([
             'status' => 'success',

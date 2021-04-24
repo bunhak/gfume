@@ -76,6 +76,7 @@ Route::group(['middleware' => 'auth:api'],function (){
         Route::post('createNewItem',[ItemController::class,'createNewItem']);
         Route::post('getAllItem',[ItemController::class,'getAllItem']);
         Route::get('getItemProperty',[ItemController::class,'getItemProperty']);
+        Route::get('mockData',[ItemController::class,'mockData']);
     });
 
     Route::group(['prefix'=>'admin/itemDetail'],function () {

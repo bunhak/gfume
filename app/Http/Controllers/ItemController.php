@@ -13,90 +13,288 @@ use App\Models\SizeType;
 use App\Models\SubCategory;
 use App\Models\SubSubCategory;
 use Illuminate\Http\Request;
+use App\Http\Controllers\FileController;
 use Validator;
 use DB;
 
 class ItemController extends Controller
 {
 
-    public function mockData(){
+
+    public function mockData(Request $request){
         //mock category
-        $a=['img/Fashion@1X.png','img/interior@1X.png'];
+        $sub_sub_categories = [];
+        $fileController = new FileController();
+        $user_id = $request->user()->id;
+        $a=[
+            [
+                'img'=>'Fashion@1X.png',
+                'path'=>'img/Fashion@1X.png',
+                'name'=>'Fashion',
+                'extension'=>'png',
+                'size'=>123,
+                'mime_type'=>'png'
+            ],
+            [
+                'img'=>'interior@1X.png',
+                'path'=>'img/interior@1X.png',
+                'name'=>'Interior',
+                'extension'=>'png',
+                'size'=>123,
+                'mime_type'=>'png'
+            ],
+            [
+                'img'=>'Beauty.svg',
+                'path'=>'img/Beauty.svg',
+                'name'=>'Beauty',
+                'extension'=>'svg',
+                'size'=>123,
+                'mime_type'=>'svg'
+            ]
+        ];
         for($i = 0;$i < 15;$i++){
-            $t = rand(0,1);
+            $t = rand(0,2);
             $cat = new Category();
-            $cat->name = 'l1('.$i.')';
-            $cat->image = $a[$t];
+            $cat->name = $a[$t]['name'].$i;
+            $cat->created_by = $user_id;
             $cat->click_count = rand(0, 100000);
             $cat->save();
+            $a[$t]['module_name'] = 'category';
+            $a[$t]['module_id'] = $cat->id;
+            $a[$t]['image_type'] = 'web';
+            $fileController->mockFile($a[$t],$user_id);
+            $a[$t]['image_type'] = 'mobile';
+            $fileController->mockFile($a[$t],$user_id);
             for($ii = 0;$ii < 4;$ii++){
-                $tt = rand(0,1);
                 $cat2 = new SubCategory();
-                $cat2->name = 'l1('.$i.') l2('.$ii.')';
+                $cat2->name = $a[$t]['name'].' sub '.$i.' ('.$ii.') ';
                 $cat2->category_id = $cat->id;
                 $cat2->category_name = $cat->name;
-                $cat2->image = $a[$tt];
                 $cat2->click_count = rand(0, 100000);
                 $cat2->save();
+                $a[$t]['module_name'] = 'sub_category';
+                $a[$t]['module_id'] = $cat2->id;
+                $a[$t]['image_type'] = 'web';
+                $fileController->mockFile($a[$t],$user_id);
+                $a[$t]['image_type'] = 'mobile';
+                $fileController->mockFile($a[$t],$user_id);
                 for($iii = 0;$iii < 5;$iii++){
-                    $ttt = rand(0,1);
                     $cat3 = new SubSubCategory();
-                    $cat3->name ='l1('.$i.') l2('.$ii.') l3('.$i.')';
-                    $cat3->sub_category_id = $cat2->id;
+                    $cat3->name =$a[$t]['name'].' sub '.$i.' sub '.$ii.' ('.$iii.')';
+                    $cat3->category_id = $cat->id;
                     $cat3->category_name = $cat->name;
+                    $cat3->sub_category_id = $cat2->id;
                     $cat3->sub_category_name = $cat2->name;
-                    $cat3->image = $a[$ttt];
                     $cat3->click_count = rand(0, 100000);
                     $cat3->save();
+                    array_push($sub_sub_categories,$cat3->id);
+                    $a[$t]['module_name'] = 'sub_sub_category';
+                    $a[$t]['module_id'] = $cat3->id;
+                    $a[$t]['image_type'] = 'web';
+                    $fileController->mockFile($a[$t],$user_id);
+                    $a[$t]['image_type'] = 'mobile';
+                    $fileController->mockFile($a[$t],$user_id);
                 }
             }
         }
 
         //mock brand
-        $a=['img/adidas.png','img/nike.png','img/jordan.png'];
+        $a=[
+            [
+                'img'=>'adidas.png',
+                'path'=>'img/adidas.png',
+                'name'=>'adidas',
+                'extension'=>'png',
+                'size'=>123,
+                'mime_type'=>'png'
+            ],
+            [
+                'img'=>'nike.png',
+                'path'=>'img/nike.png',
+                'name'=>'nike',
+                'extension'=>'png',
+                'size'=>123,
+                'mime_type'=>'png'
+            ],
+            [
+                'img'=>'jordan.png',
+                'path'=>'img/jordan.png',
+                'name'=>'jordan',
+                'extension'=>'png',
+                'size'=>123,
+                'mime_type'=>'png'
+            ]
+        ];
+        $brands = [];
         for($i =0;$i<3;$i++){
             $brand = new Brand();
-            $brand->name = 'brand '.$i;
-            $brand->image = $a[$i];
+            $brand->name = $a[$i]['name'];
             $brand->save();
+            array_push($brands,$brand->id);
+            $a[$i]['module_name'] = 'brand';
+            $a[$i]['module_id'] = $brand->id;
+            $a[$i]['image_type'] = 'web';
+            $fileController->mockFile($a[$i],$user_id);
+            $a[$i]['image_type'] = 'mobile';
+            $fileController->mockFile($a[$i],$user_id);
         }
 
-        //mock color
-        $a=['red','yellow','blue','black','white'];
-        for($i = 0;$i<5;$i++){
-            $color = new Color();
-            $color->name = $a[$i];
-            $color->save();
-        }
 
-        // mock size text
-        $sizeType = new SizeType();
-        $sizeType->name = 'text';
-        $sizeType->save();
-        $a=['xs','s','m','l','xl'];
-        for ($i = 0;$i < sizeof($a);$i++){
-            $size = new Size();
-            $size->name = $a[$i];
-            $size->size_type_id = $sizeType->id;
-            $size->order = $i;
-            $size->save();
-        }
-
-        // mock size number
-        $sizeType = new SizeType();
-        $sizeType->name = 'number';
-        $sizeType->save();
-        for ($i = 10;$i < 100;$i++){
-            $size = new Size();
-            $size->name = $i;
-            $size->size_type_id = $sizeType->id;
-            $size->order = $i;
-            $size->save();
-        }
-
+        $a=[
+            [
+                'img'=>'gfume.png',
+                'path'=>'img/gfume.png',
+                'name'=>'bag',
+                'extension'=>'png',
+                'size'=>123,
+                'mime_type'=>'png'
+            ]
+        ];
         $shop = new Shop();
         $shop->name = 'GFUME';
+        $shop->created_by = $user_id;
+        $shop->user_id = $user_id;
         $shop->save();
+        $a[0]['module_name'] = 'item';
+        $a[0]['module_id'] = $shop->id;
+        $a[0]['image_type'] = 'detail';
+        $fileController->mockFile($a[0],$user_id);
+
+
+        $a=[
+            [
+                'img'=>'bag.svg',
+                'path'=>'img/bag.svg',
+                'name'=>'bag',
+                'extension'=>'svg',
+                'size'=>123,
+                'mime_type'=>'svg'
+            ],
+            [
+                'img'=>'scarf.svg',
+                'path'=>'img/scarf.svg',
+                'name'=>'scarf',
+                'extension'=>'svg',
+                'size'=>123,
+                'mime_type'=>'svg'
+            ],
+            [
+                'img'=>'shoe.svg',
+                'path'=>'img/shoe.svg',
+                'name'=>'shoe',
+                'extension'=>'svg',
+                'size'=>123,
+                'mime_type'=>'svg'
+            ]
+        ];
+        $colors = ['Red','Yellow','Pink','Grey','Blue'];
+        for($i=0 ; $i < sizeof($sub_sub_categories);$i++){
+            $item_rand = rand(0,2);
+            $brand_rand = rand(0,2);
+            $item = new Item();
+            $item->name = $a[$item_rand]['name'].' '.$i;
+            $item->brand_id = $brands[$brand_rand];
+            $item->shop_id = $shop->id;
+            $item->description = 'this is description test for '.$a[$item_rand]['name'].' '.$i;
+            $item->sub_sub_category_id = $sub_sub_categories[$i];
+            $item->created_by = $user_id;
+            $item->save();
+            $a[$item_rand]['module_name'] = 'item';
+            $a[$item_rand]['module_id'] = $item->id;
+            for($bb =0;$bb < rand(1,8);$bb++){
+                $a[$item_rand]['image_type'] = 'detail';
+                $fileController->mockFile($a[$item_rand],$user_id);
+            }
+            for($bb =0;$bb < rand(1,8);$bb++){
+                $a[$item_rand]['image_type'] = 'slide';
+                $fileController->mockFile($a[$item_rand],$user_id);
+            }
+            $col_rand_max = rand(0,(sizeof($colors) - 1));
+            $mockColor = [];
+            for($color_rand = 0;$color_rand <= $col_rand_max;$color_rand++){
+                $color = new Color();
+                $color->name = $colors[$color_rand];
+                $color->item_id = $item->id;
+                $color->created_by = $user_id;
+                $color->save();
+                array_push($mockColor,$color->id);
+                $a[$item_rand]['module_name'] = 'color';
+                $a[$item_rand]['module_id'] = $color->id;
+                $a[$item_rand]['image_type'] = 'mobile';
+                $fileController->mockFile($a[$item_rand],$user_id);
+            }
+
+            $mockSize = [];
+            for($ss = 29;$ss < rand(32,42);$ss++){
+                $size = new Size();
+                $size->name = $ss;
+                $size->item_id = $item->id;
+                $size->created_by = $user_id;
+                $size->save();
+                array_push($mockSize,$size->id);
+            }
+
+            if(sizeof($mockColor) > 0){
+                for($c = 0;$c<sizeof($mockColor);$c++){
+                    for($s =0;$s<sizeof($mockSize);$s++){
+                        $itemDetail = new ItemDetail();
+                        $itemDetail->item_id = $item->id;
+                        $itemDetail->qty = rand(1,300);
+                        $itemDetail->price = rand(200,400000);
+                        $itemDetail->color_id = $mockColor[$c];
+                        $itemDetail->size_id = $mockSize[$s];
+                        $itemDetail->created_by = $user_id;
+                        $itemDetail->save();
+                    }
+                }
+            }else{
+                $itemDetail = new ItemDetail();
+                $itemDetail->item_id = $item->id;
+                $itemDetail->qty = rand(1,300);
+                $itemDetail->price = rand(200,400000);
+                $itemDetail->color_id = $mockColor[$c];
+                $itemDetail->size_id = $mockSize[$s];
+                $itemDetail->created_by = $user_id;
+                $itemDetail->save();
+            }
+        }
+
+
+
+//
+//        //mock color
+//        $a=['red','yellow','blue','black','white'];
+//        for($i = 0;$i<5;$i++){
+//            $color = new Color();
+//            $color->name = $a[$i];
+//            $color->save();
+//        }
+//
+//        // mock size text
+//        $sizeType = new SizeType();
+//        $sizeType->name = 'text';
+//        $sizeType->save();
+//        $a=['xs','s','m','l','xl'];
+//        for ($i = 0;$i < sizeof($a);$i++){
+//            $size = new Size();
+//            $size->name = $a[$i];
+//            $size->size_type_id = $sizeType->id;
+//            $size->order = $i;
+//            $size->save();
+//        }
+//
+//        // mock size number
+//        $sizeType = new SizeType();
+//        $sizeType->name = 'number';
+//        $sizeType->save();
+//        for ($i = 10;$i < 100;$i++){
+//            $size = new Size();
+//            $size->name = $i;
+//            $size->size_type_id = $sizeType->id;
+//            $size->order = $i;
+//            $size->save();
+//        }
+//
 
 
     }

@@ -66,7 +66,6 @@ class CategoryController extends Controller
             $cat->image = $a[$t];
             $cat->click_count = rand(0, 100000);
             $cat->save();
-
         }
 
     }

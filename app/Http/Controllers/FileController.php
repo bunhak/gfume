@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\File;
-use App\Models\Image;
-use App\Models\ItemFile;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Str;
@@ -65,7 +63,6 @@ class FileController extends Controller
 
 
     public function uploadFile(Request $request) {
-
         $validator = Validator::make($request->all(),[
             'files' => 'required',
             'id' => 'required|string',
@@ -85,9 +82,11 @@ class FileController extends Controller
             $fileDb->id = $uuid;
             $fileDb->extension =  $file->getClientOriginalExtension();
             $fileDb->size = $file->getSize();
+            $fileDb->module_id = $request->module_id;
+            $fileDb->module_name = $request->module_name;
             $fileDb->mime_type = $file->getMimeType();
             $fileDb->image_type = $request->image_type;
-            $destinationPath = 'uploads\\'.$request->id;
+            $destinationPath = 'uploads\\'.$request->module_id;
             $fileDb->url = $file->move($destinationPath,$uuid.'.'.$file->getClientOriginalExtension());
             $fileDb->created_by = $request->user()->id;
             if($request->thumbnail != 'false'){
@@ -98,13 +97,8 @@ class FileController extends Controller
                 $this->resize_crop_image(100, 100, $fileDb->url, $thumb);
                 $fileDb->thumbnail = $thumb;
             }
-            $fileDb->created_by = $request->user()->id;
             $fileDb->save();
             array_push($result,["id" => $fileDb->id, "name" => $file->getClientOriginalName()]);
-            $itemFile = new ItemFile();
-            $itemFile->file_id =  $fileDb->id;
-            $itemFile->item_id =  $request->id;
-            $itemFile->save();
         }
         return response()->json([
             'message' => 'Successfully upload file',
@@ -112,5 +106,21 @@ class FileController extends Controller
         ],200);
 
 
+    }
+
+
+    public function mockFile($file,$user_id){
+        $fileDb = new File();
+        $uuid = Str::uuid()->toString();
+        $fileDb->id = $uuid;
+        $fileDb->module_id = $file['module_id'];
+        $fileDb->module_name = $file['module_name'];
+        $fileDb->extension =  $file['extension'];
+        $fileDb->size = $file['size'];
+        $fileDb->mime_type = $file['mime_type'];
+        $fileDb->image_type = $file['image_type'];
+        $fileDb->url = $file['path'];
+        $fileDb->created_by = $user_id;
+        $fileDb->save();
     }
 }

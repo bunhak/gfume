@@ -2,22 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bf9c8a8a-f728-46e0-b7c2-5b021becaed1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/img/Beauty.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/img/bag.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/img/gfume.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/img/scarf.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/img/shoe.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Services/MobileFormatService.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.rnd" beforeDir="false" afterPath="$PROJECT_DIR$/.rnd" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/FileController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/FileController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ItemController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ItemController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/0790252e-bb36-416b-b19e-fb676055e428/0790252e-bb36-416b-b19e-fb676055e428.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/bee65003-4378-4b6f-a243-9fab41417372/bee65003-4378-4b6f-a243-9fab41417372.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/f804422a-0315-4274-bc01-8e2bb90aad22/f804422a-0315-4274-bc01-8e2bb90aad22.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/fd1a2e25-7345-4c3a-be39-1c14c12d525a/fd1a2e25-7345-4c3a-be39-1c14c12d525a.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/item_id/aeb46dc4-4122-45b5-a7b6-641d455f403d.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/uploads/item_id/fb565d12-d982-4fd0-ae79-88a66586463b.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_110548_create_items_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_110548_create_items_table.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -210,7 +200,8 @@
       <option name="presentableId" value="Default" />
       <updated>1619006756720</updated>
       <workItem from="1619006760655" duration="31706000" />
-      <workItem from="1619181055449" duration="10286000" />
+      <workItem from="1619181055449" duration="10891000" />
+      <workItem from="1619462836040" duration="9040000" />
     </task>
     <servers />
   </component>

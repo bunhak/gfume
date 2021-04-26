@@ -33,8 +33,19 @@ use App\Http\Controllers\SubSubCategoryController;
 // no need token
 Route::group(['prefix'=>'category'],function () {
     Route::get('getCategoryHome',[CategoryController::class,'getCategoryHome']);
-    Route::get('mockData',[CategoryController::class,'mockData']);
 });
+
+Route::group(['prefix'=>'item'],function () {
+    Route::get('getLookingForThis',[ItemController::class,'getLookingForThis']);
+    Route::get('getDontYouNeedThis',[ItemController::class,'getDontYouNeedThis']);
+    Route::get('getRecommendItemHome',[ItemController::class,'getRecommendItemHome']);
+    Route::get('getItemDetailById',[ItemController::class,'getItemDetailById']);
+});
+
+
+
+
+
 
 // need token
 Route::group(['middleware' => 'auth:api'],function (){

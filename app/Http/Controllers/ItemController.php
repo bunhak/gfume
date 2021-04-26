@@ -12,6 +12,7 @@ use App\Models\Size;
 use App\Models\SizeType;
 use App\Models\SubCategory;
 use App\Models\SubSubCategory;
+use App\Services\MobileFormatService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\FileController;
 use Validator;
@@ -19,8 +20,7 @@ use DB;
 
 class ItemController extends Controller
 {
-
-
+    // Admin and seller
     public function mockData(Request $request){
         //mock category
         $sub_sub_categories = [];
@@ -155,9 +155,9 @@ class ItemController extends Controller
         $shop->created_by = $user_id;
         $shop->user_id = $user_id;
         $shop->save();
-        $a[0]['module_name'] = 'item';
+        $a[0]['module_name'] = 'shop';
         $a[0]['module_id'] = $shop->id;
-        $a[0]['image_type'] = 'detail';
+        $a[0]['image_type'] = 'shop';
         $fileController->mockFile($a[0],$user_id);
 
 
@@ -252,53 +252,11 @@ class ItemController extends Controller
                 $itemDetail->item_id = $item->id;
                 $itemDetail->qty = rand(1,300);
                 $itemDetail->price = rand(200,400000);
-                $itemDetail->color_id = $mockColor[$c];
-                $itemDetail->size_id = $mockSize[$s];
                 $itemDetail->created_by = $user_id;
                 $itemDetail->save();
             }
         }
-
-
-
-//
-//        //mock color
-//        $a=['red','yellow','blue','black','white'];
-//        for($i = 0;$i<5;$i++){
-//            $color = new Color();
-//            $color->name = $a[$i];
-//            $color->save();
-//        }
-//
-//        // mock size text
-//        $sizeType = new SizeType();
-//        $sizeType->name = 'text';
-//        $sizeType->save();
-//        $a=['xs','s','m','l','xl'];
-//        for ($i = 0;$i < sizeof($a);$i++){
-//            $size = new Size();
-//            $size->name = $a[$i];
-//            $size->size_type_id = $sizeType->id;
-//            $size->order = $i;
-//            $size->save();
-//        }
-//
-//        // mock size number
-//        $sizeType = new SizeType();
-//        $sizeType->name = 'number';
-//        $sizeType->save();
-//        for ($i = 10;$i < 100;$i++){
-//            $size = new Size();
-//            $size->name = $i;
-//            $size->size_type_id = $sizeType->id;
-//            $size->order = $i;
-//            $size->save();
-//        }
-//
-
-
     }
-
     public function createNewItem(Request $request){
         $validator = Validator::make($request->all(),[
             'name' => 'required|string',
@@ -326,8 +284,6 @@ class ItemController extends Controller
             'data' => $item
         ],200);
     }
-
-
     public function deleteItem(Request $request){
         $item_id = $request->id;
         $item = Item::find($item_id);
@@ -409,7 +365,6 @@ class ItemController extends Controller
             'data' => $result
         ],200);
     }
-
     public function getItemProperty(Request $request){
         $shops = DB::table('shops')->select('id','name')->where('user_id,','=',$request->user()->id)->get();
         $brands = DB::table('brands')->select('id','name')->get();
@@ -427,4 +382,99 @@ class ItemController extends Controller
             'data' => $result
         ],200);
     }
+
+
+
+
+    //User
+    public function getLookingForThis(Request $request){
+        $limit = $request->limit ? $request->limit : 10;
+        $page = $request->page ? $request->page : 1;
+        $items = DB::select("SELECT i.id AS id, i.name AS name
+                            FROM items i 
+                            ORDER BY RAND() LIMIT ".$limit);
+        $total = Item::where('is_deleted','=',false)->count();
+        foreach ($items as $item){
+            $image = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as image FROM files WHERE module_id = '".$item->id."' AND image_type = 'slide' LIMIT 1");
+            $price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1");
+            $item->image = $image[0]->image;
+            $item->price = $price[0]->price;
+            $item->rate = rand(0, 1000);
+            $item->star = mt_rand(0 * 2, 5 * 2) / 2;
+        }
+        $last_page = ceil($total / $limit);
+        return MobileFormatService::formatWithPagination($items,'items',$page,$last_page,$limit,$total);
+
+    }
+    public function getDontYouNeedThis(Request $request){
+        $limit = $request->limit ? $request->limit : 10;
+        $page = $request->page ? $request->page : 1;
+        $items = DB::select("SELECT i.id AS id, i.name AS name
+                            FROM items i 
+                            ORDER BY RAND() LIMIT ".$limit);
+        $total = Item::where('is_deleted','=',false)->count();
+        foreach ($items as $item){
+            $image = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as image FROM files WHERE module_id = '".$item->id."' AND image_type = 'slide' LIMIT 1");
+            $price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1");
+            $item->image = $image[0]->image;
+            $item->price = $price[0]->price;
+            $item->rate = rand(0, 1000);
+            $item->star = mt_rand(0 * 2, 5 * 2) / 2;
+        }
+        $last_page = ceil($total / $limit);
+        return MobileFormatService::formatWithPagination($items,'items',$page,$last_page,$limit,$total);
+    }
+    public function getRecommendItemHome(Request $request){
+        $limit = $request->limit ? $request->limit : 10;
+        $page = $request->page ? $request->page : 1;
+        $items = DB::select("SELECT i.id AS id, i.name AS name
+                            FROM items i 
+                            ORDER BY RAND() LIMIT ".$limit);
+        $total = Item::where('is_deleted','=',false)->count();
+        foreach ($items as $item){
+            $image = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as image FROM files WHERE module_id = '".$item->id."' AND image_type = 'slide' LIMIT 1");
+            $price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1");
+            $item->image = $image[0]->image;
+            $item->price = $price[0]->price;
+            $item->rate = rand(0, 1000);
+            $item->star = mt_rand(0 * 2, 5 * 2) / 2;
+        }
+        $last_page = ceil($total / $limit);
+        return MobileFormatService::formatWithPagination($items,'items',$page,$last_page,$limit,$total);
+    }
+    public function getItemDetailById(Request $request){
+        $id = $request->id ? $request->id : null;
+        $item = DB::select("SELECT i.id AS id, i.name AS name, i.description as description,i.shop_id as shop_id
+                            FROM items i 
+                            where id = '".$id."'")[0];
+        if($item){
+            $item->price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1")[0]->price;
+            $item->image_slide = [];
+            $slides = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as slide FROM files WHERE module_id = '".$item->id."' AND image_type = 'slide'");
+            foreach ($slides as $slide){
+                array_push($item->image_slide,$slide->slide);
+            }
+            $item->image_detail = [];
+            $details = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as detail FROM files WHERE module_id = '".$item->id."' AND image_type = 'detail'");
+            foreach ($details as $detail){
+                array_push($item->image_detail,$detail->detail);
+            }
+            $item->color = DB::select("select id,name from colors where item_id = '".$item->id."'");
+            $item->size = DB::select("select id,name from sizes where item_id = '".$item->id."'");
+            $item->item_detail = DB::select("select id,qty,price from item_details where item_id = '".$item->id."'");
+            $item->image_detail = [];
+            $details = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as detail FROM files WHERE module_id = '".$item->id."' AND image_type = 'detail'");
+            foreach ($details as $detail){
+                array_push($item->image_detail,$detail->detail);
+            }
+            $shop = DB::select("SELECT id,name from shops where id = '".$item->shop_id."'")[0];
+            $shop->image = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as image FROM files WHERE module_id = '".$shop->id."' AND image_type = 'shop'")[0]->image;
+            $item->shop = $shop;
+            $item->rate = rand(0, 1000);
+            $item->star = mt_rand(0 * 2, 5 * 2) / 2;
+        }
+        return MobileFormatService::formatWithoutPagination($item);
+    }
+
+
 }

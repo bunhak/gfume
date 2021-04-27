@@ -2,12 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bf9c8a8a-f728-46e0-b7c2-5b021becaed1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Services/MobileFormatService.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.rnd" beforeDir="false" afterPath="$PROJECT_DIR$/.rnd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ItemController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ItemController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_110548_create_items_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_110548_create_items_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ReviewItem.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Services/MobileFormatService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/MobileFormatService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_112633_create_item_reviews_table.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -201,7 +201,7 @@
       <updated>1619006756720</updated>
       <workItem from="1619006760655" duration="31706000" />
       <workItem from="1619181055449" duration="10891000" />
-      <workItem from="1619462836040" duration="9040000" />
+      <workItem from="1619462836040" duration="20542000" />
     </task>
     <servers />
   </component>

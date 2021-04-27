@@ -9,8 +9,8 @@ class MobileFormatService {
                 'status' => 'success',
                 "code"=> 200,
                 "message"=> "OK",
-                'data' => $data,
-                $module => [
+                'data' => [$module => $data],
+                'meta' => [
                     'current_page' => $current_page,
                     'last_page' =>$last_page,
                     'per_page' => $per_page,

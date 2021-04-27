@@ -40,6 +40,9 @@ Route::group(['prefix'=>'item'],function () {
     Route::get('getDontYouNeedThis',[ItemController::class,'getDontYouNeedThis']);
     Route::get('getRecommendItemHome',[ItemController::class,'getRecommendItemHome']);
     Route::get('getItemDetailById',[ItemController::class,'getItemDetailById']);
+    Route::get('getGoodToCompare',[ItemController::class,'getGoodToCompare']);
+    Route::get('getCustomerViewThisItemAlsoView',[ItemController::class,'getCustomerViewThisItemAlsoView']);
+    Route::get('getLowerPrice',[ItemController::class,'getLowerPrice']);
 });
 
 

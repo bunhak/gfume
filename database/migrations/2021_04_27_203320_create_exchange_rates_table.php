@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateItemReviewsTable extends Migration
+class CreateExchangeRatesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateItemReviewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('item_reviews', function (Blueprint $table) {
+        Schema::create('exchange_rates', function (Blueprint $table) {
             $table->uuid('id');
-            $table->string('user_id');
-            $table->string('item_id');
-            $table->string('text')->nullable();
-            $table->integer('rate')->nullable();
+            $table->double('exchange_rate');
+            $table->string('money_type');
+            $table->string('created_by');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateItemReviewsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('item_reviews');
+        Schema::dropIfExists('exchange_rates');
     }
 }

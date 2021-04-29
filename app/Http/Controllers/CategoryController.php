@@ -47,7 +47,7 @@ class CategoryController extends Controller
         for($i =0 ;$i < sizeof($cat);$i ++ ){
             $temp = [
                 'id' => $cat[$i]->id,
-                'image' => env('APP_URL').$cat[$i]->image,
+                'image' => env('APP_URL').'/'.$cat[$i]->image,
                 'click_count' => $cat[$i]->click_count,
                 'name' => $cat[$i]->name
 

@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bf9c8a8a-f728-46e0-b7c2-5b021becaed1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/Beauty.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/bag.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/scarf.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/img/shoe.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ItemController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ItemController.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -159,10 +162,10 @@
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Work\Gfume\gfume\public\img" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Work\Gfume\gfume\public\img" />
     </key>
   </component>
@@ -197,7 +200,7 @@
       <workItem from="1619006760655" duration="31706000" />
       <workItem from="1619181055449" duration="10891000" />
       <workItem from="1619462836040" duration="21141000" />
-      <workItem from="1619701605498" duration="269000" />
+      <workItem from="1619701605498" duration="559000" />
     </task>
     <servers />
   </component>

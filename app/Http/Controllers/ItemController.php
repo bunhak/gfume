@@ -45,12 +45,12 @@ class ItemController extends Controller
                 'mime_type'=>'png'
             ],
             [
-                'img'=>'Beauty.svg',
-                'path'=>'img/Beauty.svg',
+                'img'=>'Beauty.png',
+                'path'=>'img/Beauty.png',
                 'name'=>'Beauty',
-                'extension'=>'svg',
+                'extension'=>'png',
                 'size'=>123,
-                'mime_type'=>'svg'
+                'mime_type'=>'png'
             ]
         ];
         for($i = 0;$i < 15;$i++){
@@ -164,28 +164,28 @@ class ItemController extends Controller
 
         $a=[
             [
-                'img'=>'bag.svg',
-                'path'=>'img/bag.svg',
+                'img'=>'bag.png',
+                'path'=>'img/bag.png',
                 'name'=>'bag',
-                'extension'=>'svg',
+                'extension'=>'png',
                 'size'=>123,
-                'mime_type'=>'svg'
+                'mime_type'=>'png'
             ],
             [
-                'img'=>'scarf.svg',
-                'path'=>'img/scarf.svg',
+                'img'=>'scarf.png',
+                'path'=>'img/scarf.png',
                 'name'=>'scarf',
-                'extension'=>'svg',
+                'extension'=>'png',
                 'size'=>123,
-                'mime_type'=>'svg'
+                'mime_type'=>'png'
             ],
             [
-                'img'=>'shoe.svg',
-                'path'=>'img/shoe.svg',
+                'img'=>'shoe.png',
+                'path'=>'img/shoe.png',
                 'name'=>'shoe',
-                'extension'=>'svg',
+                'extension'=>'png',
                 'size'=>123,
-                'mime_type'=>'svg'
+                'mime_type'=>'png'
             ]
         ];
         $colors = ['Red','Yellow','Pink','Grey','Blue'];

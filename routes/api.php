@@ -4,11 +4,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\BonusController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemDetailController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\SubCategoryController;
@@ -45,8 +47,11 @@ Route::group(['prefix'=>'item'],function () {
     Route::get('getLowerPrice',[ItemController::class,'getLowerPrice']);
 });
 
-
-
+Route::group(['prefix'=>'order'],function () {
+    Route::group(['middleware' => 'auth:api'],function (){
+        Route::get('addToCart',[OrderController::class,'addToCart']);
+    });
+});
 
 
 
@@ -57,6 +62,10 @@ Route::group(['middleware' => 'auth:api'],function (){
 
     Route::group(['prefix'=>'admin/category'],function () {
         Route::post('createCategory',[CategoryController::class,'createCategory']);
+    });
+
+    Route::group(['prefix'=>'admin/bonus'],function () {
+        Route::get('mockData',[BonusController::class,'mockData']);
     });
 
     Route::group(['prefix'=>'admin/brand'],function () {
@@ -108,5 +117,13 @@ Route::group(['prefix'=>'auth'],function (){
     Route::group(['middleware' => 'auth:api'],function (){
         Route::get('logout',[AuthController::class,'logout']);
         Route::get('user',[AuthController::class,'user']);
+    });
+});
+
+Route::group(['prefix'=>'user'],function (){
+    Route::group(['middleware' => 'auth:api'],function (){
+        Route::get('getAddresses',[AuthController::class,'getAddresses']);
+        Route::post('createAddress',[AuthController::class,'createAddress']);
+        Route::post('editAddress',[AuthController::class,'editAddress']);
     });
 });

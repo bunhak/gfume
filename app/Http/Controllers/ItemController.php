@@ -348,11 +348,11 @@ class ItemController extends Controller
         $item_details = DB::table('item_details')->where('item_id','=',$id)->get();
         $item_image_slide = DB::select("
             SELECT id, CONCAT('".env('APP_URL')."','/',url) AS url FROM files
-            WHERE item_id = '".$id."'
+            WHERE module_id = '".$id."'
             AND image_type = 'slide'");
         $item_image_detail = DB::select("
             SELECT id, CONCAT('".env('APP_URL')."','/',url) AS url FROM files
-            WHERE item_id = '".$id."'
+            WHERE module_id = '".$id."'
             AND image_type = 'detail'");
         $result = [
             "id" => $item->id,
@@ -512,11 +512,18 @@ class ItemController extends Controller
                             FROM items i 
                             where id = '".$id."'")[0];
         $exchange_rate = DB::select("select exchange_rate from exchange_rates where money_type = 'KHR' order by created_at desc limit 1")[0]->exchange_rate;
+        $bonus = DB::select("select bonus from bonuses order by created_at desc limit 1")[0]->bonus;
         if($item){
             $price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1")[0]->price;
+            $bonusUSD = ($price * $bonus) / 100;
+            $bonusKHR = $bonusUSD * $exchange_rate;
             $item->price = [
                 "USD" => $price,
                 "KHR" => $price * $exchange_rate
+            ];
+            $item->bonus = [
+                "USD" => $bonusUSD,
+                "KHR" => $bonusKHR
             ];
             $item->image_slide = [];
             $slides = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as slide FROM files WHERE module_id = '".$item->id."' AND image_type = 'slide'");

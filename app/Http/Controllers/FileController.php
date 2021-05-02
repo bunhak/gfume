@@ -6,6 +6,7 @@ use App\Models\File;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Str;
+use DB;
 
 class FileController extends Controller
 {
@@ -75,6 +76,17 @@ class FileController extends Controller
         }
         $files = $request->file('files');
         $result = [];
+        if($request->module_name == 'address' || $request->module_name == 'category'
+            || $request->module_name == 'shop' || $request->module_name == 'sub_category'
+            || $request->module_name == 'sub_sub_category' || $request->module_name == 'color'
+            || $request->module_name == 'brand'){
+            $old_files = DB::select(`select * from files where module_id = '$request->module_id' and  module_name = '$request->module_name' and image_type = '$request->image_type' and is_deleted = false`);
+            foreach ($old_files as $old_file){
+                $old_file->is_deleted = false;
+                $old_file->updated_by = $request->user()->id;
+                $old_file->save();
+            }
+        }
         for($i = 0;$i< sizeof($files);$i++){
             $file = $files[$i];
             $fileDb = new File();

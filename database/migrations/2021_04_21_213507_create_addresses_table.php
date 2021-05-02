@@ -17,6 +17,9 @@ class CreateAddressesTable extends Migration
             $table->uuid('id');
             $table->string('module_id')->nullable();
             $table->string('module_name')->nullable();
+            $table->string('name')->nullable();
+            $table->string('noted')->nullable();
+            $table->string('telephone')->nullable();
             $table->string('lat')->nullable();
             $table->string('lng')->nullable();
             $table->string('location')->nullable();

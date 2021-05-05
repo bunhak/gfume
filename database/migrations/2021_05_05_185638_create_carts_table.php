@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrderDetailsTable extends Migration
+class CreateCartsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateOrderDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('order_details', function (Blueprint $table) {
+        Schema::create('carts', function (Blueprint $table) {
             $table->uuid('id');
-            $table->string('order_id');
-            $table->string('cart_id');
+            $table->string('user_id');
             $table->double('qty');
             $table->double('price');
             $table->string('item_id');
@@ -26,17 +25,15 @@ class CreateOrderDetailsTable extends Migration
             $table->double('exchange_rate');
             $table->string('delivery_fee_id');
             $table->double('delivery_fee');
-            $table->dateTime('delivery_date');
             $table->string('bonus_id')->nullable();
             $table->double('bonus')->default(0);
             $table->double('bonus_total')->default(0);
             $table->string('discount_id')->nullable();
             $table->double('discount')->default(0);
-            $table->string('user_alert')->default('PENDING');
-            $table->string('seller_alert')->default('PENDING');
             $table->double('sub_total');
             $table->double('total');
-            $table->string('status')->default('PENDING');
+            $table->boolean('is_deleted')->default(false);
+            $table->string('status')->default('CART');
             $table->string('created_by');
             $table->string('updated_by')->nullable();
             $table->timestamps();
@@ -50,6 +47,6 @@ class CreateOrderDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_details');
+        Schema::dropIfExists('carts');
     }
 }

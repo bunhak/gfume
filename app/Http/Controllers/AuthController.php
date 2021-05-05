@@ -226,7 +226,7 @@ class AuthController extends Controller
         $address->module_id = $user->id;
         $address->module_name = 'user';
         $address->created_by = $user->id;
-        $addresses = DB::select(`select * from addresses where module_id = '$user->id' and is_deleted = false`);
+        $addresses = DB::select("select * from addresses where module_id = '$user->id' and is_deleted = false");
         if(sizeof($addresses) == 0){
             $address->is_default = true;
         }
@@ -254,7 +254,7 @@ class AuthController extends Controller
         }
 
         $user = $request->user();
-        $address = DB::select(`select * from addresses where id = '$request->id' and is_deleted = false`)[0];
+        $address = DB::select("select * from addresses where id = '$request->id' and is_deleted = false")[0];
         $address->name = $request->name;
         $address->noted = $request->noted;
         $address->lat = $request->lat;
@@ -263,7 +263,7 @@ class AuthController extends Controller
         $address->module_id = $user->id;
         $address->module_name = 'user';
         $address->created_by = $user->id;
-        $addresses = DB::select(`select * from addresses where module_id = '$user->id' and is_deleted = false`);
+        $addresses = DB::select("select * from addresses where module_id = '$user->id' and is_deleted = false");
         if($request->is_default == true && sizeof($addresses) > 0){
             $address->is_default = true;
             foreach ($addresses as $add){
@@ -278,7 +278,7 @@ class AuthController extends Controller
 
     public function getAddresses(Request $request){
        $user = $request->user;
-       $addresses = DB::select(`select id,name,noted,telephone,lat,lng,location from addresses where module_id = '$user->id'`);
+       $addresses = DB::select("select id,name,noted,telephone,lat,lng,location from addresses where module_id = '$user->id'");
        foreach ($addresses as $address){
            $images = DB::select("
             SELECT id, CONCAT('".env('APP_URL')."','/',url) AS url FROM files

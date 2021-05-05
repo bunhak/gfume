@@ -49,7 +49,10 @@ Route::group(['prefix'=>'item'],function () {
 
 Route::group(['prefix'=>'order'],function () {
     Route::group(['middleware' => 'auth:api'],function (){
-        Route::get('addToCart',[OrderController::class,'addToCart']);
+        Route::post('addToCart',[OrderController::class,'addToCart']);
+        Route::post('editCart',[OrderController::class,'editCart']);
+        Route::post('deleteFromCart',[OrderController::class,'deleteFromCart']);
+        Route::post('getCurrentCart',[OrderController::class,'getCurrentCart']);
     });
 });
 

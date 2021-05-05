@@ -11,7 +11,11 @@ class ShopController extends Controller
 {
     public function createShop(Request $request){
         $validator = Validator::make($request->all(),[
-            'name' => 'required|string'
+            'name' => 'required|string',
+            'telephone' => 'required',
+            'lat' => 'required',
+            'lng' => 'required',
+            'location' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
@@ -22,17 +26,14 @@ class ShopController extends Controller
         $shop->created_by = $request->user()->id;
         $shop->user_id = $request->user()->id;
         $shop->save();
-
-        if($request->address == true){
-            $address = new Address();
-            $address->module_id = $shop->id;
-            $address->module_name = 'shop';
-            $address->lat = $request->lat;
-            $address->lng = $request->lng;
-            $address->location = $request->location;
-            $address->is_default = true;
-            $address->save();
-        }
+        $address = new Address();
+        $address->module_id = $shop->id;
+        $address->module_name = 'shop';
+        $address->lat = $request->lat;
+        $address->lng = $request->lng;
+        $address->location = $request->location;
+        $address->is_default = true;
+        $address->save();
 
 
 

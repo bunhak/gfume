@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bonus;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\DeliveryFee;
+use App\Models\Discount;
 use App\Models\ExchangeRate;
 use App\Models\Item;
 use App\Models\ItemDetail;
@@ -200,6 +203,20 @@ class ItemController extends Controller
             $item->sub_sub_category_id = $sub_sub_categories[$i];
             $item->created_by = $user_id;
             $item->save();
+            $delivery_fee = new DeliveryFee();
+            $delivery_fee->item_id = $item->id;
+            $delivery_fee->shop_id = $item->shop_id;
+            $delivery_fee->delivery_fee = rand(1,3);
+            $delivery_fee->created_by = $user_id;
+            $delivery_fee->save();
+            $discount = new Discount();
+            $discount->item_id = $item->id;
+            $discount->discount = rand(1,60);
+            $date = date("Y-m-d H:i:s");
+            $discount->start_date = $date;
+            $discount->end_date = date("Y-m-d H:i:s",strtotime("+".rand(30,100)." days", strtotime($date)));
+            $discount->created_by = $user_id;
+            $discount->save();
             $a[$item_rand]['module_name'] = 'item';
             $a[$item_rand]['module_id'] = $item->id;
             for($bb =0;$bb < rand(1,8);$bb++){
@@ -260,10 +277,16 @@ class ItemController extends Controller
 
         //mock exchange rate
         $exc = new ExchangeRate();
-        $exc->exchange_rate = 4050;
+        $exc->exchange_rate = 4100;
         $exc->money_type = 'KHR';
         $exc->created_by = $user_id;
         $exc->save();
+
+        //mock bonus
+        $bonus = new Bonus();
+        $bonus->bonus = 1;
+        $bonus->created_by = $user_id;
+        $bonus->save();
     }
     public function createNewItem(Request $request){
         $validator = Validator::make($request->all(),[
@@ -271,6 +294,7 @@ class ItemController extends Controller
             'shop_id' => 'required|string',
             'sub_sub_category_id' => 'required|string',
             'item_details' => 'required',
+            'delivery_fee' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
@@ -285,6 +309,14 @@ class ItemController extends Controller
         $item->sub_sub_category_id = $request->sub_sub_category_id;
         $item->created_by = $request->user()->id;
         $item->save();
+
+        $delivery_fee = new DeliveryFee();
+        $delivery_fee->item_id = $item->id;
+        $delivery_fee->shop_id = $item->shop_id;
+        $delivery_fee->delivery_fee = $request->delivery_fee;
+        $delivery_fee->created_by = $request->user()->id;
+        $delivery_fee->save();
+
         return response()->json([
             'status' => 'success',
             "code"=> 200,
@@ -396,95 +428,22 @@ class ItemController extends Controller
 
     //User
     public function getLookingForThis(Request $request){
-        $limit = $request->limit ? (int)$request->limit : 10;
-        $page = $request->page ? (int)$request->page : 1;
-        $exchange_rate = DB::select("select exchange_rate from exchange_rates where money_type = 'KHR' order by created_at desc limit 1")[0]->exchange_rate;
-        $items = DB::select("SELECT i.id AS id, i.name AS name
-                            FROM items i 
-                            ORDER BY RAND() LIMIT ".$limit);
-        $total = Item::where('is_deleted','=',false)->count();
-        foreach ($items as $item){
-            $image = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as image FROM files WHERE module_id = '".$item->id."' AND image_type = 'slide' LIMIT 1");
-            $price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1");
-            $item->image = $image[0]->image;
-            $item->price = [
-                "USD" => $price[0]->price,
-                "KHR" => $price[0]->price * $exchange_rate
-            ];
-            $item->rate = rand(0, 1000);
-            $item->star = mt_rand(0 * 2, 5 * 2) / 2;
-        }
-        $last_page = ceil($total / $limit);
-        return MobileFormatService::formatWithPagination($items,'items',$page,$last_page,$limit,$total);
-
+        return $this->getDataRandom($request);
     }
     public function getDontYouNeedThis(Request $request){
-        $limit = $request->limit ? (int)$request->limit : 10;
-        $page = $request->page ? (int)$request->page : 1;
-        $exchange_rate = DB::select("select exchange_rate from exchange_rates where money_type = 'KHR' order by created_at desc limit 1")[0]->exchange_rate;
-        $items = DB::select("SELECT i.id AS id, i.name AS name
-                            FROM items i 
-                            ORDER BY RAND() LIMIT ".$limit);
-        $total = Item::where('is_deleted','=',false)->count();
-        foreach ($items as $item){
-            $image = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as image FROM files WHERE module_id = '".$item->id."' AND image_type = 'slide' LIMIT 1");
-            $price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1");
-            $item->image = $image[0]->image;
-            $item->price = [
-                "USD" => $price[0]->price,
-                "KHR" => $price[0]->price * $exchange_rate
-            ];
-            $item->rate = rand(0, 1000);
-            $item->star = mt_rand(0 * 2, 5 * 2) / 2;
-        }
-        $last_page = ceil($total / $limit);
-        return MobileFormatService::formatWithPagination($items,'items',$page,$last_page,$limit,$total);
+        return $this->getDataRandom($request);
     }
     public function getRecommendItemHome(Request $request){
-        $limit = $request->limit ? (int)$request->limit : 10;
-        $page = $request->page ? (int)$request->page : 1;
-        $exchange_rate = DB::select("select exchange_rate from exchange_rates where money_type = 'KHR' order by created_at desc limit 1")[0]->exchange_rate;
-        $items = DB::select("SELECT i.id AS id, i.name AS name
-                            FROM items i 
-                            ORDER BY RAND() LIMIT ".$limit);
-        $total = Item::where('is_deleted','=',false)->count();
-        foreach ($items as $item){
-            $image = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as image FROM files WHERE module_id = '".$item->id."' AND image_type = 'slide' LIMIT 1");
-            $price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1");
-            $item->image = $image[0]->image;
-            $item->price = [
-                "USD" => $price[0]->price,
-                "KHR" => $price[0]->price * $exchange_rate
-            ];
-            $item->rate = rand(0, 1000);
-            $item->star = mt_rand(0 * 2, 5 * 2) / 2;
-        }
-        $last_page = ceil($total / $limit);
-        return MobileFormatService::formatWithPagination($items,'items',$page,$last_page,$limit,$total);
+        return $this->getDataRandom($request);
     }
     public function getGoodToCompare(Request $request){
-        $limit = $request->limit ? (int)$request->limit : 10;
-        $page = $request->page ? (int)$request->page : 1;
-        $exchange_rate = DB::select("select exchange_rate from exchange_rates where money_type = 'KHR' order by created_at desc limit 1")[0]->exchange_rate;
-        $items = DB::select("SELECT i.id AS id, i.name AS name
-                            FROM items i 
-                            ORDER BY RAND() LIMIT ".$limit);
-        $total = Item::where('is_deleted','=',false)->count();
-        foreach ($items as $item){
-            $image = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as image FROM files WHERE module_id = '".$item->id."' AND image_type = 'slide' LIMIT 1");
-            $price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1");
-            $item->image = $image[0]->image;
-            $item->price = [
-                "USD" => $price[0]->price,
-                "KHR" => $price[0]->price * $exchange_rate
-            ];
-            $item->rate = rand(0, 1000);
-            $item->star = mt_rand(0 * 2, 5 * 2) / 2;
-        }
-        $last_page = ceil($total / $limit);
-        return MobileFormatService::formatWithPagination($items,'items',$page,$last_page,$limit,$total);
+        return $this->getDataRandom($request);
     }
     public function getCustomerViewThisItemAlsoView(Request $request){
+        return $this->getDataRandom($request);
+    }
+
+    public function getDataRandom(Request $request){
         $limit = $request->limit ? (int)$request->limit : 10;
         $page = $request->page ? (int)$request->page : 1;
         $exchange_rate = DB::select("select exchange_rate from exchange_rates where money_type = 'KHR' order by created_at desc limit 1")[0]->exchange_rate;
@@ -496,9 +455,27 @@ class ItemController extends Controller
             $image = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as image FROM files WHERE module_id = '".$item->id."' AND image_type = 'slide' LIMIT 1");
             $price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1");
             $item->image = $image[0]->image;
-            $item->price = [
-                "USD" => $price[0]->price,
-                "KHR" => $price[0]->price * $exchange_rate
+            $date = date("Y-m-d H:i:s");
+            $discounts = DB::select("SELECT * from discounts where active = true and is_deleted = false and item_id = '$item->id' and start_date < '$date' and end_date > '$date'");
+            $full_price = $price[0]->price;
+            $discount = null;
+            $item->discount = 0;
+            if(sizeof($discounts) > 0){
+                $discount = round(($full_price * $item->discount) / 100,2 );
+                $item->price = [
+                    "USD" => $full_price - $discount,
+                    "KHR" => ($full_price - $discount) * $exchange_rate
+                ];
+            }
+            else{
+                $item->price = [
+                    "USD" => $full_price,
+                    "KHR" => $full_price * $exchange_rate
+                ];
+            }
+            $item->full_price = [
+                "USD" => $full_price,
+                "KHR" => $full_price * $exchange_rate
             ];
             $item->rate = rand(0, 1000);
             $item->star = mt_rand(0 * 2, 5 * 2) / 2;
@@ -506,6 +483,7 @@ class ItemController extends Controller
         $last_page = ceil($total / $limit);
         return MobileFormatService::formatWithPagination($items,'items',$page,$last_page,$limit,$total);
     }
+
     public function getItemDetailById(Request $request){
         $id = $request->id ? $request->id : null;
         $item = DB::select("SELECT i.id AS id, i.name AS name, i.description as description,i.shop_id as shop_id

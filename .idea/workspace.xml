@@ -3,10 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="bf9c8a8a-f728-46e0-b7c2-5b021becaed1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.rnd" beforeDir="false" afterPath="$PROJECT_DIR$/.rnd" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/FileController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/FileController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ItemController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ItemController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_21_213507_create_addresses_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_21_213507_create_addresses_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ShopController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ShopController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_30_094453_create_orders_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_30_094453_create_orders_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_30_094522_create_order_details_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_30_094522_create_order_details_table.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -204,7 +207,8 @@
       <workItem from="1619701605498" duration="890000" />
       <workItem from="1619774218840" duration="5633000" />
       <workItem from="1619887121917" duration="8190000" />
-      <workItem from="1619987049840" duration="7467000" />
+      <workItem from="1619987049840" duration="24696000" />
+      <workItem from="1620238356784" duration="9966000" />
     </task>
     <servers />
   </component>

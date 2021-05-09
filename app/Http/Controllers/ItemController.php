@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\GlobalVariable;
 use App\Models\Bonus;
 use App\Models\Brand;
 use App\Models\Category;
@@ -9,6 +10,8 @@ use App\Models\Color;
 use App\Models\DeliveryFee;
 use App\Models\Discount;
 use App\Models\ExchangeRate;
+use App\Models\GlobalSearch;
+use App\Models\GlobalSearchRank;
 use App\Models\Item;
 use App\Models\ItemDetail;
 use App\Models\Shop;
@@ -16,6 +19,8 @@ use App\Models\Size;
 use App\Models\SizeType;
 use App\Models\SubCategory;
 use App\Models\SubSubCategory;
+use App\Models\UserSearch;
+use App\Models\UserWishList;
 use App\Services\MobileFormatService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\FileController;
@@ -199,6 +204,7 @@ class ItemController extends Controller
             $item->name = $a[$item_rand]['name'].' '.$i;
             $item->brand_id = $brands[$brand_rand];
             $item->shop_id = $shop->id;
+            $item->discount = rand(0,100);
             $item->description = 'this is description test for '.$a[$item_rand]['name'].' '.$i;
             $item->sub_sub_category_id = $sub_sub_categories[$i];
             $item->created_by = $user_id;
@@ -209,14 +215,17 @@ class ItemController extends Controller
             $delivery_fee->delivery_fee = rand(1,3);
             $delivery_fee->created_by = $user_id;
             $delivery_fee->save();
-            $discount = new Discount();
-            $discount->item_id = $item->id;
-            $discount->discount = rand(1,60);
-            $date = date("Y-m-d H:i:s");
-            $discount->start_date = $date;
-            $discount->end_date = date("Y-m-d H:i:s",strtotime("+".rand(30,100)." days", strtotime($date)));
-            $discount->created_by = $user_id;
-            $discount->save();
+            $shouldHaveDiscount = rand(0,1);
+            if($shouldHaveDiscount === 0){
+                $discount = new Discount();
+                $discount->item_id = $item->id;
+                $discount->discount = rand(1,60);
+                $date = date("Y-m-d H:i:s");
+                $discount->start_date = $date;
+                $discount->end_date = date("Y-m-d H:i:s",strtotime("+".rand(0,100)." days", strtotime($date)));
+                $discount->created_by = $user_id;
+                $discount->save();
+            }
             $a[$item_rand]['module_name'] = 'item';
             $a[$item_rand]['module_id'] = $item->id;
             for($bb =0;$bb < rand(1,8);$bb++){
@@ -305,6 +314,7 @@ class ItemController extends Controller
         $item->brand_id = $request->brand_id;
         $item->shop_id = $request->shop_id;
         $item->video_url = $request->video_url;
+        $item->discount = $request->discount;
         $item->description = $request->description;
         $item->sub_sub_category_id = $request->sub_sub_category_id;
         $item->created_by = $request->user()->id;
@@ -484,14 +494,34 @@ class ItemController extends Controller
         return MobileFormatService::formatWithPagination($items,'items',$page,$last_page,$limit,$total);
     }
 
+
     public function getItemDetailById(Request $request){
+        $validator = Validator::make($request->all(),[
+            'id' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        $user_id = $request->user_id ? $request->user_id : null;
         $id = $request->id ? $request->id : null;
+        $itemView = Item::where('id','=',$id)->first();
+        $itemView->view++;
+        $itemView->save();
         $item = DB::select("SELECT i.id AS id, i.name AS name, i.description as description,i.shop_id as shop_id
                             FROM items i 
                             where id = '".$id."'")[0];
         $exchange_rate = DB::select("select exchange_rate from exchange_rates where money_type = 'KHR' order by created_at desc limit 1")[0]->exchange_rate;
         $bonus = DB::select("select bonus from bonuses order by created_at desc limit 1")[0]->bonus;
+        $userWishList = null;
+        if($user_id){
+            $userWishList = UserWishList::where('item_id','=',$item->id)->where('user','=',$user_id)->first();
+        }
         if($item){
+            if($userWishList){
+                $item->userWishList = true;
+            }else{
+                $item->userWishList = false;
+            }
             $price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1")[0]->price;
             $bonusUSD = ($price * $bonus) / 100;
             $bonusKHR = $bonusUSD * $exchange_rate;
@@ -586,6 +616,209 @@ class ItemController extends Controller
         }else{
             return MobileFormatService::formatWithPagination([],'items',$page,0,$limit,0);
         }
+    }
+
+    public function getUserWishList(Request $request){
+        $limit = $request->limit ? (int)$request->limit : 10;
+        $page = $request->page ? (int)$request->page : 1;
+        $offset = $limit * ($page - 1);
+        $user = $request->user();
+        $userWishLists = DB::select("select item_id from user_wish_lists where user_id = '$user->id' order by created_at limit ".$limit." offset ".$offset);
+        $ids = [];
+        foreach ($userWishLists as $userWishList){
+            array_push($ids,$userWishList->item_id);
+        }
+        $exchange_rate = DB::select("select exchange_rate from exchange_rates where money_type = 'KHR' order by created_at desc limit 1")[0]->exchange_rate;
+        $items = Item::whereIn('id',$ids)->select('id','name')->get();
+        $total = UserWishList::where('user_id','=',$user->id)->count();
+        foreach ($items as $item){
+            $image = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as image FROM files WHERE module_id = '".$item->id."' AND image_type = 'slide' LIMIT 1");
+            $price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1");
+            $item->image = $image[0]->image;
+            $date = date("Y-m-d H:i:s");
+            $discounts = DB::select("SELECT * from discounts where active = true and is_deleted = false and item_id = '$item->id' and start_date < '$date' and end_date > '$date'");
+            $full_price = $price[0]->price;
+            $discount = null;
+            $item->discount = 0;
+            if(sizeof($discounts) > 0){
+                $discount = round(($full_price * $item->discount) / 100,2 );
+                $item->price = [
+                    "USD" => $full_price - $discount,
+                    "KHR" => ($full_price - $discount) * $exchange_rate
+                ];
+            }
+            else{
+                $item->price = [
+                    "USD" => $full_price,
+                    "KHR" => $full_price * $exchange_rate
+                ];
+            }
+            $item->full_price = [
+                "USD" => $full_price,
+                "KHR" => $full_price * $exchange_rate
+            ];
+            $item->rate = rand(0, 1000);
+            $item->star = mt_rand(0 * 2, 5 * 2) / 2;
+        }
+        $last_page = ceil($total / $limit);
+        return MobileFormatService::formatWithPagination($items,'items',$page,$last_page,$limit,$total);
+    }
+    public function addUserWishList(Request $request){
+        $validator = Validator::make($request->all(),[
+            'item_id' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        $result = '';
+        $item_id = $request->item_id;
+        $user = $request->user();
+        $userWishItem = UserWishList::where('user_id','=',$user->id)->where('item_id','=',$item_id)->first();
+        if($userWishItem){
+            $result = 'Item already added';
+        }else{
+            $userWishItem = new UserWishList();
+            $userWishItem->user_id = $user->id;
+            $userWishItem->item_id = $item_id;
+            $userWishItem->save();
+            $result = 'Item successfully added';
+        }
+        return MobileFormatService::formatWithoutPagination($result);
+    }
+    public function removeUserWishList(Request $request){
+        $validator = Validator::make($request->all(),[
+            'item_id' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        $user = $request->user();
+        $userWishList = UserWishList::where('item_id','=',$request->item_id)->where('user_id','=',$user->id)->first();
+        $userWishList->delete();
+        return MobileFormatService::formatWithoutPagination('Item successfully removed');
+    }
+    public function search(Request $request){
+        $limit = $request->limit ? (int)$request->limit : 10;
+        $page = $request->page ? (int)$request->page : 1;
+        $user = $request->user_id ? $request->user_id : null;
+        $search = $request->search ? $request->search : '';
+        $searches = '';
+        $date = date("Y-m-d H:0:0");
+        if($user){
+            $user_search = UserSearch::where('user_id','=',$user)->where('search','=',$search)->first();
+            if($user_search){
+                $user_search->count++;
+                $user_search->save();
+            }else{
+                $user_search = new UserSearch();
+                $user_search->search = $search;
+                $user_search->user_id = $user;
+                $user_search->count = 1;
+                $user_search->save();
+            }
+        }
+        $global_search = GlobalSearch::where('search','=',$search)->first();
+        if($global_search){
+            $global_search->count ++;
+            $global_search->save();
+        }else{
+            $global_search = new GlobalSearch();
+            $global_search->search = $search;
+            $global_search->count = 1;
+            $global_search->save();
+        }
+        $global_search_rank = GlobalSearchRank::where('search','=',$search)->where('date_search','=',$date)->first();
+        if($global_search_rank){
+            $global_search_rank->count ++;
+            $global_search_rank->save();
+        }else{
+            $global_search_rank = new GlobalSearchRank();
+            $global_search_rank->search = $search;
+            $global_search_rank->count = 1;
+            $global_search_rank->date_search = $date;
+            $global_search_rank->save();
+        }
+        foreach (explode(" ", $search) as $s){
+            $searches.= " And name like '%".$s."%'";
+        }
+        $exchange_rate = DB::select("select exchange_rate from exchange_rates where money_type = 'KHR' order by created_at desc limit 1")[0]->exchange_rate;
+        $items = DB::select("SELECT i.id AS id, i.name AS name
+                            FROM items i where is_deleted = false ".$searches."  LIMIT ".$limit." offset ".(($page - 1) * 10));
+        $total = DB::select("SELECT i.id AS id, i.name AS name
+                            FROM items i where is_deleted = false ".$searches);
+        foreach ($items as $item){
+            $image = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as image FROM files WHERE module_id = '".$item->id."' AND image_type = 'slide' LIMIT 1");
+            $price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1");
+            $item->image = $image[0]->image;
+            $date = date("Y-m-d H:i:s");
+            $discounts = DB::select("SELECT * from discounts where active = true and is_deleted = false and item_id = '$item->id' and start_date < '$date' and end_date > '$date'");
+            $full_price = $price[0]->price;
+            $discount = null;
+            $item->discount = 0;
+            if(sizeof($discounts) > 0){
+                $discount = round(($full_price * $item->discount) / 100,2 );
+                $item->price = [
+                    "USD" => $full_price - $discount,
+                    "KHR" => ($full_price - $discount) * $exchange_rate
+                ];
+            }
+            else{
+                $item->price = [
+                    "USD" => $full_price,
+                    "KHR" => $full_price * $exchange_rate
+                ];
+            }
+            $item->full_price = [
+                "USD" => $full_price,
+                "KHR" => $full_price * $exchange_rate
+            ];
+            $item->rate = rand(0, 1000);
+            $item->star = mt_rand(0 * 2, 5 * 2) / 2;
+        }
+        $last_page = ceil(sizeof($total) / $limit);
+        return MobileFormatService::formatWithPagination($items,'items',$page,$last_page,$limit,sizeof($total));
+    }
+
+    public function getRecentSearch(Request $request){
+//        date("Y-m-d H:i:s",strtotime("+".rand(30,100)." days", strtotime($date)));
+        $user_id = $request->user_id ? $request->user_id : null;
+        if($user_id){
+            $recent_searches = UserSearch::where('user_id','=',$user_id)->orderBy('updated_at', 'DESC')->limit(10)->get();
+            $result = [];
+            foreach ($recent_searches as $recentSearch){
+                array_push($result,$recentSearch->search);
+            }
+            return MobileFormatService::formatWithoutPagination($result);
+        }
+    }
+
+    public function getRecommendSearch(Request $request){
+        $user_id = $request->user_id ? $request->user_id : null;
+        $last_search = $request->last_search ? $request->last_search : '';
+        $search_texts = explode(" ", $last_search);
+        $search_text = '';
+        if(sizeof($search_texts) > 0){
+            $search_text = $search_texts[0];
+        }
+        if($user_id){
+            $recent_searches = UserSearch::where('user_id','=',$user_id)->orderBy('updated_at', 'DESC')->limit(1)->get();
+            if(sizeof($recent_searches) > 0){
+                $search_text =  $recent_searches[0]->search;
+            }
+        }
+        $result = [];
+        $recommends = GlobalSearch::where('search','like','%'.$search_text.'%')->where('search','<>',$search_text)->orderBy('count', 'DESC')->limit(10)->get();
+        foreach ($recommends as $recommend){
+            array_push($result,$recommend->search);
+        }
+        return MobileFormatService::formatWithoutPagination($result);
+    }
+
+    public function getSearchRank(Request $request){
+        $limit = $request->limit ? $request->limit : 30;
+        $result = [];
+        GlobalSearchRankController::getGlobalSearchRankRecursive($result,$limit,0);
+        return MobileFormatService::formatWithoutPagination($result);
     }
 
 }

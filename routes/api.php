@@ -15,6 +15,7 @@ use App\Http\Controllers\SizeController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\SubSubCategoryController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,7 +46,17 @@ Route::group(['prefix'=>'item'],function () {
     Route::get('getGoodToCompare',[ItemController::class,'getGoodToCompare']);
     Route::get('getCustomerViewThisItemAlsoView',[ItemController::class,'getCustomerViewThisItemAlsoView']);
     Route::get('getLowerPrice',[ItemController::class,'getLowerPrice']);
+    Route::post('search',[ItemController::class,'search']);
+    Route::post('getRecentSearch',[ItemController::class,'getRecentSearch']);
+    Route::post('getRecommendSearch',[ItemController::class,'getRecommendSearch']);
+    Route::get('getSearchRank',[ItemController::class,'getSearchRank']);
+    Route::group(['middleware' => 'auth:api'],function (){
+        Route::get('getUserWishList',[ItemController::class,'getUserWishList']);
+        Route::post('addUserWishList',[ItemController::class,'addUserWishList']);
+        Route::post('removeUserWishList',[ItemController::class,'removeUserWishList']);
+    });
 });
+
 
 Route::group(['prefix'=>'order'],function () {
     Route::group(['middleware' => 'auth:api'],function (){
@@ -125,8 +136,8 @@ Route::group(['prefix'=>'auth'],function (){
 
 Route::group(['prefix'=>'user'],function (){
     Route::group(['middleware' => 'auth:api'],function (){
-        Route::get('getAddresses',[AuthController::class,'getAddresses']);
-        Route::post('createAddress',[AuthController::class,'createAddress']);
-        Route::post('editAddress',[AuthController::class,'editAddress']);
+        Route::get('getAddresses',[UserController::class,'getAddresses']);
+        Route::post('createAddress',[UserController::class,'createAddress']);
+        Route::post('editAddress',[UserController::class,'editAddress']);
     });
 });

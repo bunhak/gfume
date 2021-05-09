@@ -6,10 +6,7 @@
       <change beforePath="$PROJECT_DIR$/.rnd" beforeDir="false" afterPath="$PROJECT_DIR$/.rnd" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ItemController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ItemController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ShopController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ShopController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_30_094453_create_orders_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_30_094453_create_orders_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_30_094522_create_order_details_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_30_094522_create_order_details_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_04_09_110548_create_items_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_04_09_110548_create_items_table.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -208,7 +205,9 @@
       <workItem from="1619774218840" duration="5633000" />
       <workItem from="1619887121917" duration="8190000" />
       <workItem from="1619987049840" duration="24696000" />
-      <workItem from="1620238356784" duration="9966000" />
+      <workItem from="1620238356784" duration="10565000" />
+      <workItem from="1620318007392" duration="6004000" />
+      <workItem from="1620414741223" duration="13593000" />
     </task>
     <servers />
   </component>
@@ -227,5 +226,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Http/Controllers/ItemController.php</url>
+          <line>110</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

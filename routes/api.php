@@ -45,6 +45,7 @@ Route::group(['prefix'=>'item'],function () {
     Route::get('getItemDetailById',[ItemController::class,'getItemDetailById']);
     Route::get('getGoodToCompare',[ItemController::class,'getGoodToCompare']);
     Route::get('getCustomerViewThisItemAlsoView',[ItemController::class,'getCustomerViewThisItemAlsoView']);
+    Route::get('getSpecialPrice',[ItemController::class,'getSpecialPrice']);
     Route::get('getLowerPrice',[ItemController::class,'getLowerPrice']);
     Route::post('search',[ItemController::class,'search']);
     Route::post('getRecentSearch',[ItemController::class,'getRecentSearch']);

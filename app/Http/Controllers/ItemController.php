@@ -500,6 +500,60 @@ class ItemController extends Controller
         $last_page = ceil($total / $limit);
         return MobileFormatService::formatWithPagination($items,'items',$page,$last_page,$limit,$total);
     }
+
+    public function getSpecialPrice(Request $request){
+        $limit = $request->limit ? (int)$request->limit : 10;
+        $page = $request->page ? (int)$request->page : 1;
+        $date = date("Y-m-d H:i:s");
+        $exchange_rate = DB::select("select exchange_rate from exchange_rates where money_type = 'KHR' order by created_at desc limit 1")[0]->exchange_rate;
+        $items = DB::select("SELECT i.id AS id, i.name AS name
+                            FROM items i 
+                            INNER JOIN discounts d on d.item_id = i.id
+                            where d.start_date < '$date' and d.end_date > '$date'
+                            AND d.active = true
+                            ORDER BY RAND() LIMIT ".$limit);
+        $total = DB::select("SELECT count(i.id) as count_item
+                            FROM items i 
+                            INNER JOIN discounts d on d.item_id = i.id
+                            where d.start_date < '$date' and d.end_date > '$date'
+                            AND d.active = true")[0]->count_item;
+        foreach ($items as $item){
+            $image = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as image FROM files WHERE module_id = '".$item->id."' AND image_type = 'slide' LIMIT 1");
+            $price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1");
+            $item->image = $image[0]->image;
+
+            $discounts = DB::select("SELECT * from discounts where active = true and is_deleted = false and item_id = '$item->id' and start_date < '$date' and end_date > '$date'");
+            $full_price = $price[0]->price;
+            $discount = null;
+            $item->discount = DB::select("SELECT * from discounts where active = true and is_deleted = false and item_id = '$item->id' and is_default = true order by created_at desc limit 1")[0]->discount;
+            if(sizeof($discounts) > 0){
+                $item->discount_limit_date = $discounts[0]->end_date;
+                $item->discount = $discounts[0]->discount;
+                $discount = round(($full_price * $item->discount) / 100,2 );
+                $item->price = [
+                    "USD" => $full_price - $discount,
+                    "KHR" => ($full_price - $discount) * $exchange_rate
+                ];
+            }
+            else{
+                $item->discount_limit_date = null;
+                $item->price = [
+                    "USD" => $full_price,
+                    "KHR" => $full_price * $exchange_rate
+                ];
+            }
+            $item->full_price = [
+                "USD" => $full_price,
+                "KHR" => $full_price * $exchange_rate
+            ];
+            $item->rate = rand(0, 1000);
+            $item->star = mt_rand(0 * 2, 5 * 2) / 2;
+        }
+        $last_page = ceil($total / $limit);
+        return MobileFormatService::formatWithPagination($items,'items',$page,$last_page,$limit,$total);
+    }
+
+
     public function getItemDetailById(Request $request){
         $validator = Validator::make($request->all(),[
             'id' => 'required'

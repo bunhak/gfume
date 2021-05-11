@@ -24,7 +24,6 @@ class CreateItemsTable extends Migration
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->double('view')->default(0);
-            $table->integer('discount')->default(0);
             $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });

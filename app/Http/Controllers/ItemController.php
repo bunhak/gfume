@@ -204,7 +204,6 @@ class ItemController extends Controller
             $item->name = $a[$item_rand]['name'].' '.$i;
             $item->brand_id = $brands[$brand_rand];
             $item->shop_id = $shop->id;
-            $item->discount = rand(0,100);
             $item->description = 'this is description test for '.$a[$item_rand]['name'].' '.$i;
             $item->sub_sub_category_id = $sub_sub_categories[$i];
             $item->created_by = $user_id;
@@ -216,6 +215,12 @@ class ItemController extends Controller
             $delivery_fee->created_by = $user_id;
             $delivery_fee->save();
             $shouldHaveDiscount = rand(0,1);
+            $discount = new Discount();
+            $discount->item_id = $item->id;
+            $discount->discount = rand(1,60);
+            $discount->is_default = true;
+            $discount->created_by = $user_id;
+            $discount->save();
             if($shouldHaveDiscount === 0){
                 $discount = new Discount();
                 $discount->item_id = $item->id;
@@ -314,7 +319,6 @@ class ItemController extends Controller
         $item->brand_id = $request->brand_id;
         $item->shop_id = $request->shop_id;
         $item->video_url = $request->video_url;
-        $item->discount = $request->discount;
         $item->description = $request->description;
         $item->sub_sub_category_id = $request->sub_sub_category_id;
         $item->created_by = $request->user()->id;
@@ -469,8 +473,10 @@ class ItemController extends Controller
             $discounts = DB::select("SELECT * from discounts where active = true and is_deleted = false and item_id = '$item->id' and start_date < '$date' and end_date > '$date'");
             $full_price = $price[0]->price;
             $discount = null;
-            $item->discount = 0;
+            $item->discount = DB::select("SELECT * from discounts where active = true and is_deleted = false and item_id = '$item->id' and is_default = true order by created_at desc limit 1")[0]->discount;
             if(sizeof($discounts) > 0){
+                $item->discount_limit_date = $discounts[0]->end_date;
+                $item->discount = $discounts[0]->discount;
                 $discount = round(($full_price * $item->discount) / 100,2 );
                 $item->price = [
                     "USD" => $full_price - $discount,
@@ -478,6 +484,7 @@ class ItemController extends Controller
                 ];
             }
             else{
+                $item->discount_limit_date = null;
                 $item->price = [
                     "USD" => $full_price,
                     "KHR" => $full_price * $exchange_rate
@@ -493,8 +500,6 @@ class ItemController extends Controller
         $last_page = ceil($total / $limit);
         return MobileFormatService::formatWithPagination($items,'items',$page,$last_page,$limit,$total);
     }
-
-
     public function getItemDetailById(Request $request){
         $validator = Validator::make($request->all(),[
             'id' => 'required'
@@ -522,13 +527,36 @@ class ItemController extends Controller
             }else{
                 $item->userWishList = false;
             }
-            $price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1")[0]->price;
-            $bonusUSD = ($price * $bonus) / 100;
-            $bonusKHR = $bonusUSD * $exchange_rate;
-            $item->price = [
-                "USD" => $price,
-                "KHR" => $price * $exchange_rate
+            $price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1");
+            $date = date("Y-m-d H:i:s");
+            $discounts = DB::select("SELECT * from discounts where active = true and is_deleted = false and is_default = false and item_id = '$item->id' and start_date < '$date' and end_date > '$date'");
+            $full_price = $price[0]->price;
+            $discount = null;
+            $item->discount = DB::select("SELECT * from discounts where active = true and is_deleted = false and item_id = '$item->id' and is_default = true order by created_at desc limit 1")[0]->discount;
+            if(sizeof($discounts) > 0){
+                $item->discount_limit_date = $discounts[0]->end_date;
+                $item->discount = $discounts[0]->discount;
+                $discount = round(($full_price * $item->discount) / 100,2 );
+                $item->price = [
+                    "USD" => $full_price - $discount,
+                    "KHR" => ($full_price - $discount) * $exchange_rate
+                ];
+            }
+            else{
+                $item->discount_limit_date = null;
+                $discount = round(($full_price * $item->discount) / 100,2 );
+                $item->price = [
+                    "USD" => $full_price - $discount,
+                    "KHR" => ($full_price - $discount) * $exchange_rate
+                ];
+            }
+            $item->full_price = [
+                "USD" => $full_price,
+                "KHR" => $full_price * $exchange_rate
             ];
+            $price_after_discount = $item->price['USD'];
+            $bonusUSD = round(($price_after_discount * $bonus) / 100,2);
+            $bonusKHR = $bonusUSD * $exchange_rate;
             $item->bonus = [
                 "USD" => $bonusUSD,
                 "KHR" => $bonusKHR
@@ -549,9 +577,16 @@ class ItemController extends Controller
             $item->in_stock = 0;
             foreach ($item->item_detail as $itd){
                 $item->in_stock = $item->in_stock + (int)$itd->qty;
+                $full_price_itd = $itd->price;
+                $discount = round(($full_price_itd * $item->discount) / 100,2 );
+                $price_after_discount_itd = $full_price_itd - $discount;
                 $itd->price = [
-                    "USD" => $itd->price,
-                    "KHR" => $itd->price * $exchange_rate
+                    "USD" => $price_after_discount_itd,
+                    "KHR" => $price_after_discount_itd * $exchange_rate
+                ];
+                $itd->full_price = [
+                    "USD" => $full_price_itd,
+                    "KHR" => $full_price_itd * $exchange_rate
                 ];
             }
             $item->image_detail = [];
@@ -572,17 +607,26 @@ class ItemController extends Controller
         $id = $request->id;
         $page = $request->page ? (int)$request->page : 1;
         $limit = $request->limit ? (int)$request->limit : 1;
-        $item = DB::select("SELECT i.id,i.name,itd.price FROM items i
-                INNER JOIN item_details itd ON itd.item_id = i.id
-                WHERE i.id = '".$id."'
-                ORDER BY itd.price
-                LIMIT 1")[0];
-        $item_lower_count = DB::select("SELECT i.id,i.name,itd.price FROM item_details itd
-            INNER JOIN items i ON itd.item_id = i.id
-            WHERE itd.price < ".$item->price."
-            AND i.id <> '".$item->id."'
-            AND i.name = '".$item->name."'
-            ORDER BY itd.price");
+        $date = date("Y-m-d H:i:s");
+        $item = DB::select("SELECT i.id,i.name,itd.price,d.discount FROM items i
+                    INNER JOIN item_details itd ON itd.item_id = i.id
+                    INNER JOIN discounts d ON d.item_id = i.id
+                    WHERE i.id = '".$id."'
+                    AND ((d.start_date < '".$date."' AND d.end_date > '".$date."') OR d.is_default = true)
+                    AND d.is_deleted = false
+                    ORDER BY itd.price,d.end_date DESC
+                    LIMIT 1")[0];
+        $price = $item->price - (($item->price * $item->discount)/100);
+        $item_lower_count = DB::select("SELECT i.id,i.name,itd.price,d.discount FROM items i
+                    INNER JOIN item_details itd ON itd.item_id = i.id
+                    INNER JOIN discounts d ON d.item_id = i.id
+                    WHERE i.id <> '".$id."'
+                    AND (itd.price - ((itd.price * d.discount)/100)) < ".$price."
+                    AND i.id <> '".$item->id."'
+                    AND i.name = '".$item->name."'
+                    AND ((d.start_date < '".$date."' AND d.end_date > '".$date."') OR d.is_default = true)
+                    AND d.is_deleted = false
+                    ORDER BY itd.price,d.end_date DESC");
         $tmp = [];
         foreach ($item_lower_count as $ilc){
             $tmp[$ilc->id] = $ilc;
@@ -602,9 +646,30 @@ class ItemController extends Controller
                 $image = DB::select("SELECT CONCAT('".env('APP_URL')."','/',url) as image FROM files WHERE module_id = '".$item->id."' AND image_type = 'slide' LIMIT 1");
                 $price = DB::select("SELECT price FROM item_details WHERE item_id = '".$item->id."' order by price limit 1");
                 $item->image = $image[0]->image;
-                $item->price = [
-                    "USD" => $price[0]->price,
-                    "KHR" => $price[0]->price * $exchange_rate
+                $discounts = DB::select("SELECT * from discounts where active = true and is_deleted = false and item_id = '$item->id' and start_date < '$date' and end_date > '$date'");
+                $full_price = $price[0]->price;
+                $discount = null;
+                $item->discount = DB::select("SELECT * from discounts where active = true and is_deleted = false and item_id = '$item->id' and is_default = true order by created_at desc limit 1")[0]->discount;
+                if(sizeof($discounts) > 0){
+                    $item->discount_limit_date = $discounts[0]->end_date;
+                    $item->discount = $discounts[0]->discount;
+                    $discount = round(($full_price * $item->discount) / 100,2 );
+                    $item->price = [
+                        "USD" => $full_price - $discount,
+                        "KHR" => ($full_price - $discount) * $exchange_rate
+                    ];
+                }
+                else{
+                    $item->discount_limit_date = null;
+                    $discount = round(($full_price * $item->discount) / 100,2 );
+                    $item->price = [
+                        "USD" => $full_price - $discount,
+                        "KHR" => ($full_price - $discount) * $exchange_rate
+                    ];
+                }
+                $item->full_price = [
+                    "USD" => $full_price,
+                    "KHR" => $full_price * $exchange_rate
                 ];
                 $item->rate = rand(0, 1000);
                 $item->star = mt_rand(0 * 2, 5 * 2) / 2;
@@ -617,7 +682,6 @@ class ItemController extends Controller
             return MobileFormatService::formatWithPagination([],'items',$page,0,$limit,0);
         }
     }
-
     public function getUserWishList(Request $request){
         $limit = $request->limit ? (int)$request->limit : 10;
         $page = $request->page ? (int)$request->page : 1;
@@ -641,6 +705,8 @@ class ItemController extends Controller
             $discount = null;
             $item->discount = 0;
             if(sizeof($discounts) > 0){
+                $item->discount_limit_date = $discounts[0]->end_date;
+                $item->discount = $discounts[0]->discount;
                 $discount = round(($full_price * $item->discount) / 100,2 );
                 $item->price = [
                     "USD" => $full_price - $discount,
@@ -648,9 +714,11 @@ class ItemController extends Controller
                 ];
             }
             else{
+                $item->discount_limit_date = null;
+                $discount = round(($full_price * $item->discount) / 100,2 );
                 $item->price = [
-                    "USD" => $full_price,
-                    "KHR" => $full_price * $exchange_rate
+                    "USD" => $full_price - $discount,
+                    "KHR" => ($full_price - $discount) * $exchange_rate
                 ];
             }
             $item->full_price = [
@@ -742,7 +810,7 @@ class ItemController extends Controller
             $searches.= " And name like '%".$s."%'";
         }
         $exchange_rate = DB::select("select exchange_rate from exchange_rates where money_type = 'KHR' order by created_at desc limit 1")[0]->exchange_rate;
-        $items = DB::select("SELECT i.id AS id, i.name AS name
+        $items = DB::select("SELECT i.id AS id, i.name AS name, i.discount as discount
                             FROM items i where is_deleted = false ".$searches."  LIMIT ".$limit." offset ".(($page - 1) * 10));
         $total = DB::select("SELECT i.id AS id, i.name AS name
                             FROM items i where is_deleted = false ".$searches);
@@ -753,9 +821,9 @@ class ItemController extends Controller
             $date = date("Y-m-d H:i:s");
             $discounts = DB::select("SELECT * from discounts where active = true and is_deleted = false and item_id = '$item->id' and start_date < '$date' and end_date > '$date'");
             $full_price = $price[0]->price;
-            $discount = null;
-            $item->discount = 0;
             if(sizeof($discounts) > 0){
+                $item->discount_limit_date = $discounts[0]->end_date;
+                $item->discount = $discounts[0]->discount;
                 $discount = round(($full_price * $item->discount) / 100,2 );
                 $item->price = [
                     "USD" => $full_price - $discount,
@@ -763,9 +831,11 @@ class ItemController extends Controller
                 ];
             }
             else{
+                $item->discount_limit_date = null;
+                $discount = round(($full_price * $item->discount) / 100,2 );
                 $item->price = [
-                    "USD" => $full_price,
-                    "KHR" => $full_price * $exchange_rate
+                    "USD" => $full_price - $discount,
+                    "KHR" => ($full_price - $discount) * $exchange_rate
                 ];
             }
             $item->full_price = [
@@ -778,9 +848,7 @@ class ItemController extends Controller
         $last_page = ceil(sizeof($total) / $limit);
         return MobileFormatService::formatWithPagination($items,'items',$page,$last_page,$limit,sizeof($total));
     }
-
     public function getRecentSearch(Request $request){
-//        date("Y-m-d H:i:s",strtotime("+".rand(30,100)." days", strtotime($date)));
         $user_id = $request->user_id ? $request->user_id : null;
         if($user_id){
             $recent_searches = UserSearch::where('user_id','=',$user_id)->orderBy('updated_at', 'DESC')->limit(10)->get();
@@ -791,7 +859,6 @@ class ItemController extends Controller
             return MobileFormatService::formatWithoutPagination($result);
         }
     }
-
     public function getRecommendSearch(Request $request){
         $user_id = $request->user_id ? $request->user_id : null;
         $last_search = $request->last_search ? $request->last_search : '';
@@ -813,7 +880,6 @@ class ItemController extends Controller
         }
         return MobileFormatService::formatWithoutPagination($result);
     }
-
     public function getSearchRank(Request $request){
         $limit = $request->limit ? $request->limit : 30;
         $result = [];

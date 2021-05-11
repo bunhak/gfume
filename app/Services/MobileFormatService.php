@@ -4,7 +4,7 @@ namespace App\Services;
 
 class MobileFormatService {
     public static function formatWithPagination($data,$module,$current_page,$last_page,$per_page,$total){
-        if($data){
+        if($data || sizeof($data) == 0){
             return response()->json([
                 'status' => 'success',
                 "code"=> 200,

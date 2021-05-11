@@ -17,10 +17,11 @@ class CreateDiscountsTable extends Migration
             $table->uuid('id');
             $table->string('item_id');
             $table->integer('discount');
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('end_date')->nullable();
             $table->boolean('active')->default(true);
             $table->boolean('is_deleted')->default(false);
+            $table->boolean('is_default')->default(false);
             $table->string('created_by');
             $table->string('updated_by')->nullable();
             $table->timestamps();

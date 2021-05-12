@@ -14,6 +14,7 @@ use App\Models\GlobalSearch;
 use App\Models\GlobalSearchRank;
 use App\Models\Item;
 use App\Models\ItemDetail;
+use App\Models\ItemSearchRank;
 use App\Models\Shop;
 use App\Models\Size;
 use App\Models\SizeType;
@@ -484,10 +485,11 @@ class ItemController extends Controller
                 ];
             }
             else{
+                $discount = round(($full_price * $item->discount) / 100,2 );
                 $item->discount_limit_date = null;
                 $item->price = [
-                    "USD" => $full_price,
-                    "KHR" => $full_price * $exchange_rate
+                    "USD" => $full_price - $discount,
+                    "KHR" => ($full_price - $discount) * $exchange_rate
                 ];
             }
             $item->full_price = [
@@ -536,10 +538,11 @@ class ItemController extends Controller
                 ];
             }
             else{
+                $discount = round(($full_price * $item->discount) / 100,2 );
                 $item->discount_limit_date = null;
                 $item->price = [
-                    "USD" => $full_price,
-                    "KHR" => $full_price * $exchange_rate
+                    "USD" => $full_price - $discount,
+                    "KHR" => ($full_price - $discount) * $exchange_rate
                 ];
             }
             $item->full_price = [
@@ -566,6 +569,18 @@ class ItemController extends Controller
         $itemView = Item::where('id','=',$id)->first();
         $itemView->view++;
         $itemView->save();
+        $today_date = date("Y-m-d 00:00:00");
+        $itemSearchRank = ItemSearchRank::where('item_id','=',$id)->where('date_search','=',$today_date)->first();
+        if($itemSearchRank){
+            $itemSearchRank->count++;
+            $itemSearchRank->save();
+        }else{
+            $itemSearchRank = new ItemSearchRank();
+            $itemSearchRank->item_id = $id;
+            $itemSearchRank->count = 1;
+            $itemSearchRank->date_search = $today_date;
+            $itemSearchRank->save();
+        }
         $item = DB::select("SELECT i.id AS id, i.name AS name, i.description as description,i.shop_id as shop_id
                             FROM items i 
                             where id = '".$id."'")[0];
@@ -938,6 +953,14 @@ class ItemController extends Controller
         $limit = $request->limit ? $request->limit : 30;
         $result = [];
         GlobalSearchRankController::getGlobalSearchRankRecursive($result,$limit,0);
+        return MobileFormatService::formatWithoutPagination($result);
+    }
+
+    public function getItemSearchRank(Request $request){
+        $limit = $request->limit ? $request->limit : 30;
+        $category_name = $request->category_name ? $request->category_name : "Fashion";
+        $result = [];
+        ItemSearchRankController::getItemSearchRankRecursive($result,$limit,0,$category_name);
         return MobileFormatService::formatWithoutPagination($result);
     }
 

@@ -51,6 +51,7 @@ Route::group(['prefix'=>'item'],function () {
     Route::post('getRecentSearch',[ItemController::class,'getRecentSearch']);
     Route::post('getRecommendSearch',[ItemController::class,'getRecommendSearch']);
     Route::get('getSearchRank',[ItemController::class,'getSearchRank']);
+    Route::get('getItemSearchRank',[ItemController::class,'getItemSearchRank']);
     Route::group(['middleware' => 'auth:api'],function (){
         Route::get('getUserWishList',[ItemController::class,'getUserWishList']);
         Route::post('addUserWishList',[ItemController::class,'addUserWishList']);

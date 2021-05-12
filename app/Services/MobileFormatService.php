@@ -27,7 +27,11 @@ class MobileFormatService {
         }
     }
     public static function formatWithoutPagination($data){
-        if($data){
+        $is_array = false;
+        if(gettype($data) == 'array'){
+            $is_array = true;
+        }
+        if($data || ($is_array == true && sizeof($data) == 0)){
             return response()->json([
                 'status' => 'success',
                 "code"=> 200,

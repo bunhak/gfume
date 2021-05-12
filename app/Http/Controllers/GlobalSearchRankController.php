@@ -11,7 +11,6 @@ class GlobalSearchRankController extends Controller
     public static function getGlobalSearchRankRecursive(&$array,$limit,$increase){
         $searchText = '';
         foreach ($array as $a){
-            echo $a['search'];
             $searchText.= " And search <> '".$a['search']."' ";
         }
         $globalSearchRanks = DB::select("select * from global_search_ranks where count > 0 ".$searchText."order by date_search desc,count desc limit 1");

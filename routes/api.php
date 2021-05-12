@@ -36,6 +36,7 @@ use App\Http\Controllers\UserController;
 // no need token
 Route::group(['prefix'=>'category'],function () {
     Route::get('getCategoryHome',[CategoryController::class,'getCategoryHome']);
+    Route::post('getUserSubCategory',[CategoryController::class,'getUserSubCategory']);
 });
 
 Route::group(['prefix'=>'item'],function () {

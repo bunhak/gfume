@@ -15,11 +15,13 @@ use App\Models\GlobalSearchRank;
 use App\Models\Item;
 use App\Models\ItemDetail;
 use App\Models\ItemSearchRank;
+use App\Models\ItemSubSubCategory;
 use App\Models\Shop;
 use App\Models\Size;
 use App\Models\SizeType;
 use App\Models\SubCategory;
 use App\Models\SubSubCategory;
+use App\Models\UserDefaultSubCategory;
 use App\Models\UserSearch;
 use App\Models\UserWishList;
 use App\Services\MobileFormatService;
@@ -34,6 +36,7 @@ class ItemController extends Controller
     public function mockData(Request $request){
         //mock category
         $sub_sub_categories = [];
+        $sub_categories = [];
         $fileController = new FileController();
         $user_id = $request->user()->id;
         $a=[
@@ -82,6 +85,7 @@ class ItemController extends Controller
                 $cat2->category_name = $cat->name;
                 $cat2->click_count = rand(0, 100000);
                 $cat2->save();
+                array_push($sub_categories,$cat2->id);
                 $a[$t]['module_name'] = 'sub_category';
                 $a[$t]['module_id'] = $cat2->id;
                 $a[$t]['image_type'] = 'web';
@@ -106,6 +110,14 @@ class ItemController extends Controller
                     $fileController->mockFile($a[$t],$user_id);
                 }
             }
+        }
+
+        for($i = 0;$i < 18;$i++){
+            $user_default_sub_category = new UserDefaultSubCategory();
+            $user_default_sub_category->sub_category_id = $sub_categories[$i];
+            $user_default_sub_category->rank = $i + 1;
+            $user_default_sub_category->created_by = $user_id;
+            $user_default_sub_category->save();
         }
 
         //mock brand
@@ -206,9 +218,23 @@ class ItemController extends Controller
             $item->brand_id = $brands[$brand_rand];
             $item->shop_id = $shop->id;
             $item->description = 'this is description test for '.$a[$item_rand]['name'].' '.$i;
-            $item->sub_sub_category_id = $sub_sub_categories[$i];
             $item->created_by = $user_id;
             $item->save();
+            if($i >= (sizeof($sub_sub_categories) - 4)){
+                for ($ssb = 0;$ssb<= rand(0,3);$ssb++){
+                    $item_sub_sub_category = new ItemSubSubCategory();
+                    $item_sub_sub_category->item_id = $item->id;
+                    $item_sub_sub_category->sub_sub_category_id = $sub_sub_categories[$i - $ssb];
+                    $item_sub_sub_category->save();
+                }
+            }else{
+                for ($ssb = 0;$ssb<= rand(0,3);$ssb++){
+                    $item_sub_sub_category = new ItemSubSubCategory();
+                    $item_sub_sub_category->item_id = $item->id;
+                    $item_sub_sub_category->sub_sub_category_id = $sub_sub_categories[$i + $ssb];
+                    $item_sub_sub_category->save();
+                }
+            }
             $delivery_fee = new DeliveryFee();
             $delivery_fee->item_id = $item->id;
             $delivery_fee->shop_id = $item->shop_id;
@@ -321,9 +347,12 @@ class ItemController extends Controller
         $item->shop_id = $request->shop_id;
         $item->video_url = $request->video_url;
         $item->description = $request->description;
-        $item->sub_sub_category_id = $request->sub_sub_category_id;
         $item->created_by = $request->user()->id;
         $item->save();
+        $item_sub_sub_category = new ItemSubSubCategory();
+        $item_sub_sub_category->item_id = $item->id;
+        $item_sub_sub_category->sub_sub_category_id = $request->sub_sub_category_id;
+        $item_sub_sub_category->save();
 
         $delivery_fee = new DeliveryFee();
         $delivery_fee->item_id = $item->id;
@@ -358,13 +387,17 @@ class ItemController extends Controller
         if($request->search && $request->search != ''){
             $where = ' AND i.name like "%'.$request->search.'%"';
         }
-        $items = DB::select("SELECT i.id AS id , i.name AS name, b.name AS brand, s.name AS shop, ssc.sub_category_name AS sub_sub_category FROM items i
+        $items = DB::select("SELECT i.id AS id , i.name AS name, b.name AS brand, s.name AS shop  FROM items i
                             LEFT JOIN brands b ON i.brand_id = b.id
                             LEFT JOIN shops s ON i.shop_id = s.id
-                            LEFT JOIN sub_sub_categories ssc ON i.sub_sub_category_id = ssc.id
                             WHERE i.is_deleted = false ".$where."
                             LIMIT ".$limit."
-                            offset ".(($page - 1) * 10));
+                            offset ".(($page - 1) * $limit));
+        foreach ($items as $item){
+            $item->sub_sub_category = DB::select("SELECT ssc.name AS sub_sub_category FROM item_sub_sub_categories issc
+                            INNER JOIN sub_sub_categories ssc ON ssc.id = issc.sub_sub_category_id
+                            WHERE issc.item_id = '".$item->id."' limit 1")[0]->sub_sub_category;
+        }
         $count = DB::table('items')->where('is_deleted','=',false)->count();
         $result = [
             'items' => $items,
@@ -401,6 +434,9 @@ class ItemController extends Controller
             SELECT id, CONCAT('".env('APP_URL')."','/',url) AS url FROM files
             WHERE module_id = '".$id."'
             AND image_type = 'detail'");
+        $item->sub_sub_category = DB::select("SELECT ssc.name AS sub_sub_category FROM item_sub_sub_categories issc
+                            INNER JOIN sub_sub_categories ssc ON ssc.id = issc.sub_sub_category_id
+                            WHERE issc.item_id = '".$item->id."' limit 1")[0]->sub_sub_category;
         $result = [
             "id" => $item->id,
             "name" => $item->name,

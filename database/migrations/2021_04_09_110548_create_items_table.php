@@ -19,7 +19,6 @@ class CreateItemsTable extends Migration
             $table->string('brand_id')->nullable();
             $table->string('shop_id')->nullable();
             $table->string('video_url')->nullable();
-            $table->string('sub_sub_category_id');
             $table->longText('description')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

@@ -14,7 +14,8 @@ class ItemSearchRankController extends Controller
         }
         $itemSearchRanks = DB::select("SELECT i.id AS id, i.name AS name FROM item_search_ranks isr
                                 INNER JOIN items i ON i.id = isr.item_id
-                                INNER JOIN sub_sub_categories ssc ON i.sub_sub_category_id = ssc.id
+                                INNER JOIN item_sub_sub_categories issc on issc.item_id = i.id
+                                INNER JOIN sub_sub_categories ssc ON issc.sub_sub_category_id = ssc.id
                                 INNER JOIN categories c ON c.id = ssc.category_id
                                 WHERE c.name LIKE '%".$category_name."%' ".$searchText."
                                 ORDER BY isr.date_search DESC,isr.count DESC

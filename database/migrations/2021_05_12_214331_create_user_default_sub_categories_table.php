@@ -16,7 +16,7 @@ class CreateUserDefaultSubCategoriesTable extends Migration
         Schema::create('user_default_sub_categories', function (Blueprint $table) {
             $table->uuid('id');
             $table->string('sub_category_id');
-            $table->integer('order');
+            $table->integer('rank');
             $table->string('created_by');
             $table->string('updated_by')->nullable();
             $table->timestamps();

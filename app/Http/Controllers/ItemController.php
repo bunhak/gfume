@@ -227,7 +227,8 @@ class ItemController extends Controller
                     $item_sub_sub_category->sub_sub_category_id = $sub_sub_categories[$i - $ssb];
                     $item_sub_sub_category->save();
                 }
-            }else{
+            }
+            else{
                 for ($ssb = 0;$ssb<= rand(0,3);$ssb++){
                     $item_sub_sub_category = new ItemSubSubCategory();
                     $item_sub_sub_category->item_id = $item->id;

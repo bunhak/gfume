@@ -45,6 +45,7 @@ class AuthController extends Controller
         }
         $token->save();
         return response()->json([
+            'id' => $user->id,
             'name' => $user->name,
             'username' => $user->username,
             'currency' => $user->currency,
@@ -86,6 +87,7 @@ class AuthController extends Controller
         }
         $token->save();
         return response()->json([
+            'id' => $user->id,
             'name' => $user->name,
             'username' => $user->username,
             'currency' => $user->currency,
@@ -130,6 +132,7 @@ class AuthController extends Controller
         }
         $token->save();
         return response()->json([
+            'id' => $user->id,
             'name' => $user->name,
             'username' => $user->username,
             'currency' => $user->currency,
@@ -188,6 +191,7 @@ class AuthController extends Controller
         }
         $token->save();
         return response()->json([
+            'id' => $user->id,
             'name' => $user->name,
             'username' => $user->username,
             'currency' => $user->currency,

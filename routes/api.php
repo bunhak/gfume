@@ -53,6 +53,9 @@ Route::group(['prefix'=>'item'],function () {
     Route::post('getRecommendSearch',[ItemController::class,'getRecommendSearch']);
     Route::get('getSearchRank',[ItemController::class,'getSearchRank']);
     Route::get('getItemSearchRank',[ItemController::class,'getItemSearchRank']);
+    Route::get('getItemSearchRankBySubCategoryId',[ItemController::class,'getItemSearchRankBySubCategoryId']);
+    Route::get('getItemBySubCategoryId',[ItemController::class,'getItemBySubCategoryId']);
+    Route::get('getItemByCategoryId',[ItemController::class,'getItemByCategoryId']);
     Route::group(['middleware' => 'auth:api'],function (){
         Route::get('getUserWishList',[ItemController::class,'getUserWishList']);
         Route::post('addUserWishList',[ItemController::class,'addUserWishList']);

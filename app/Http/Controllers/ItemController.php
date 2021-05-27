@@ -21,6 +21,7 @@ use App\Models\Size;
 use App\Models\SizeType;
 use App\Models\SubCategory;
 use App\Models\SubSubCategory;
+use App\Models\UserAlsoViewItem;
 use App\Models\UserDefaultSubCategory;
 use App\Models\UserSearch;
 use App\Models\UserWishList;
@@ -585,6 +586,19 @@ class ItemController extends Controller
         }
         $user_id = $request->user_id ? $request->user_id : null;
         $id = $request->id ? $request->id : null;
+        if($request->from_item_id){
+            $user_also_view = UserAlsoViewItem::where('item_id','=',$id)->where('from_item_id','=',$request->from_item_id)->first();
+            if($user_also_view){
+                $user_also_view->count ++;
+                $user_also_view->save();
+            }else{
+                $user_also_view = new UserAlsoViewItem();
+                $user_also_view->item_id = $id;
+                $user_also_view->from_item_id = $request->from_item_id;
+                $user_also_view->count = 1;
+                $user_also_view->save();
+            }
+        }
         $itemView = Item::where('id','=',$id)->first();
         $itemView->view++;
         $itemView->save();
@@ -949,6 +963,24 @@ class ItemController extends Controller
             INNER JOIN sub_sub_categories ssc ON ssc.id = issc.sub_sub_category_id
             WHERE ssc.category_id = '".$category_id."'
             ORDER by i.`view` DESC
+            LIMIT ".$limit." OFFSET ".(($page - 1) * $limit));
+        $items = [];
+        foreach ($tmp_items as $tmp_item){
+            $item = ItemController::getDetailItem($tmp_item->id,$exchange_rate);
+            array_push($items,$item);
+        }
+        $last_page = ceil(sizeof($total) / $limit);
+        return MobileFormatService::formatWithPagination($items,'items',$page,$last_page,$limit,sizeof($total));
+    }
+
+    public function getCustomerViewedThisItemAlsoView(Request $request){
+        $limit = $request->limit ? (int)$request->limit : 10;
+        $page = $request->page ? (int)$request->page : 1;
+        $id = $request->item_id;
+        $exchange_rate = DB::select("select exchange_rate from exchange_rates where money_type = 'KHR' order by created_at desc limit 1")[0]->exchange_rate;
+        $total = DB::select("select item_id from user_also_view_items where item_id = '".$id."'");
+        $tmp_items = DB::select("select from_item_id as id from user_also_view_items i where item_id = '".$id."'
+            ORDER by i.`count` DESC
             LIMIT ".$limit." OFFSET ".(($page - 1) * $limit));
         $items = [];
         foreach ($tmp_items as $tmp_item){

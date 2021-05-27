@@ -56,6 +56,9 @@ Route::group(['prefix'=>'item'],function () {
     Route::get('getItemSearchRankBySubCategoryId',[ItemController::class,'getItemSearchRankBySubCategoryId']);
     Route::get('getItemBySubCategoryId',[ItemController::class,'getItemBySubCategoryId']);
     Route::get('getItemByCategoryId',[ItemController::class,'getItemByCategoryId']);
+    Route::get('getRelateProductGoodToCompare',[ItemController::class,'getRelateProductGoodToCompare']);
+    Route::get('getItemBySubCategoryId',[ItemController::class,'getItemBySubCategoryId']);
+    Route::get('getCustomerViewedThisItemAlsoView',[ItemController::class,'getCustomerViewedThisItemAlsoView']);
     Route::group(['middleware' => 'auth:api'],function (){
         Route::get('getUserWishList',[ItemController::class,'getUserWishList']);
         Route::post('addUserWishList',[ItemController::class,'addUserWishList']);
@@ -74,11 +77,13 @@ Route::group(['prefix'=>'order'],function () {
 });
 
 
+Route::group(['prefix'=>'admin/item'],function(){
+    Route::get('mockData',[ItemController::class,'mockData']);
+});
 
 // need token
 Route::group(['middleware' => 'auth:api'],function (){
     Route::post('/uploadFile',[FileController::class,'uploadFile']);
-
 
     Route::group(['prefix'=>'admin/category'],function () {
         Route::post('createCategory',[CategoryController::class,'createCategory']);
@@ -100,8 +105,6 @@ Route::group(['middleware' => 'auth:api'],function (){
         Route::post('createSubSubCategory',[SubSubCategoryController::class,'createSubSubCategory']);
     });
 
-
-
     Route::group(['prefix'=>'admin/shop'],function () {
         Route::post('createShop',[ShopController::class,'createShop']);
     });
@@ -119,7 +122,6 @@ Route::group(['middleware' => 'auth:api'],function (){
         Route::post('createNewItem',[ItemController::class,'createNewItem']);
         Route::post('getAllItem',[ItemController::class,'getAllItem']);
         Route::get('getItemProperty',[ItemController::class,'getItemProperty']);
-        Route::get('mockData',[ItemController::class,'mockData']);
     });
 
     Route::group(['prefix'=>'admin/itemDetail'],function () {
